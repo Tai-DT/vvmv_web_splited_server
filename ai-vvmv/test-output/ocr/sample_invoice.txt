@@ -1,0 +1,6 @@
+COMMERCIAL INVOICE
+Invoice No: INV-001-2026
+Bill of Lading: BL123456789
+HS Code: 90318090
+Incoterm: FOB   Currency: USD
+Container: ABCD1234567

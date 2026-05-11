@@ -1,0 +1,26 @@
+# Secrets / env
+.env
+.env.local
+.env.*.local
+
+# Dependencies & build
+node_modules/
+.next/
+out/
+dist/
+*.tsbuildinfo
+coverage/
+
+# OS / editor
+.DS_Store
+*.log
+.pnpm-debug.log*
+
+# Large local datasets & dumps — không đưa lên GitHub (vượt quota / không phải mã nguồn)
+ai-vvmv/vvmv-dumps/
+ai-vvmv/llm-dataset/
+ai-vvmv/vvmv-operational-bundle/
+ai-vvmv/vvmv-ecus-erp-full/
+ai-vvmv/venv/
+ai-vvmv/.venv/
+ai-vvmv/output/

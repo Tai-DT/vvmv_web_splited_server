@@ -1,0 +1,82 @@
+{
+  "version": "2026-05-10.cds-normalized-v1",
+  "source": "vvmv-backend/vvmv-frontend Prisma follow_up_cds_info",
+  "purpose": "Stable CDS payload contract for vvmv-ai extraction, autofill, RAG and training datasets.",
+  "tables": {
+    "follow_up_cds_info": {
+      "role": "one CDS declaration header/form per follow_up",
+      "primaryKey": "id",
+      "uniqueKeys": ["follow_up_id"],
+      "notes": [
+        "Repeat groups are not stored as JSON columns.",
+        "AI should emit camelCase payload fields; backend sanitizes and persists them into scalar columns plus child tables."
+      ]
+    },
+    "cds_bill_item": {
+      "role": "billItems[]",
+      "foreignKey": "cds_info_id -> follow_up_cds_info.id",
+      "orderBy": "sort_order",
+      "fields": ["billNumber", "billDate", "hawbNumber", "mawbYear"]
+    },
+    "cds_valuation_adjustment": {
+      "role": "valuationAdjustments[]",
+      "foreignKey": "cds_info_id -> follow_up_cds_info.id",
+      "orderBy": "sort_order",
+      "fields": ["nameCode", "classificationCode", "currencyCode", "adjustmentValue", "allocationRatio"]
+    },
+    "cds_transport_schedule": {
+      "role": "transportSchedules[]",
+      "foreignKey": "cds_info_id -> follow_up_cds_info.id",
+      "orderBy": "sort_order",
+      "fields": ["locationCode", "locationName", "arrivalDate", "departureDate"]
+    },
+    "cds_import_license": {
+      "role": "importLicenses[]",
+      "foreignKey": "cds_info_id -> follow_up_cds_info.id",
+      "orderBy": "sort_order",
+      "fields": ["licenseNumber"]
+    },
+    "cds_other_legal_document": {
+      "role": "otherLegalDocumentCodes[]",
+      "foreignKey": "cds_info_id -> follow_up_cds_info.id",
+      "orderBy": "sort_order",
+      "fields": ["documentCode"]
+    },
+    "cds_electronic_attachment": {
+      "role": "electronicAttachments[]",
+      "foreignKey": "cds_info_id -> follow_up_cds_info.id",
+      "orderBy": "sort_order",
+      "fields": ["attachmentNumber", "attachmentDescription"]
+    }
+  },
+  "reusableReferences": [
+    "cds_operation_code_lookup",
+    "cds_permit_lookup",
+    "cds_permit_type_lookup",
+    "cds_processing_department_lookup",
+    "cds_field_option_lookup",
+    "cds_electronic_attachment_lookup",
+    "partners_master_data",
+    "customs_warehouse",
+    "foreign_port",
+    "shipping_line",
+    "field_option"
+  ],
+  "aiPayloadShape": {
+    "scalarFields": "Use canonical camelCase fields from vvmv-frontend/lib/followup/cds-info-contract.ts PERSISTED_CDS_INFO_FIELDS, excluding repeat groups listed below.",
+    "repeatGroups": {
+      "billItems": [{ "billNumber": null, "billDate": null, "hawbNumber": null, "mawbYear": null }],
+      "valuationAdjustments": [{ "nameCode": null, "classificationCode": null, "currencyCode": null, "adjustmentValue": null, "allocationRatio": null }],
+      "transportSchedules": [{ "locationCode": null, "locationName": null, "arrivalDate": null, "departureDate": null }],
+      "importLicenses": [null],
+      "otherLegalDocumentCodes": [null],
+      "electronicAttachments": [{ "attachmentNumber": null, "attachmentDescription": null }]
+    }
+  },
+  "normalizationRules": [
+    "Store shared lookup/reference values once in lookup/master tables and reference by code in CDS payloads.",
+    "Keep declaration-specific user-entered values in follow_up_cds_info or its child tables.",
+    "Do not write large raw OCR/AI JSON blobs into CDS form tables; keep only sanitized canonical fields.",
+    "AI outputs should be deterministic, code-first, and can include display labels only if backend sanitizer strips them."
+  ]
+}

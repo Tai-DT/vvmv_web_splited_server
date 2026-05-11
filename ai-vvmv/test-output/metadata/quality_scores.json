@@ -1,0 +1,11 @@
+{
+  "completeness_score": 100.0,
+  "consistency_score": 100.0,
+  "duplicate_score": 100.0,
+  "dataset_quality": {
+    "classification": 100.0,
+    "qa": 100.0,
+    "generation": 100.0
+  },
+  "overall_quality_score": 100.0
+}

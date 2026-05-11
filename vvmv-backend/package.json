@@ -1,0 +1,44 @@
+{
+  "name": "vvmv-backend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "nest build",
+    "db:generate": "prisma generate --schema prisma/schema.prisma",
+    "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
+    "dev": "PORT=3001 nest start --watch",
+    "options:audit": "node scripts/sync-option-data.mjs --audit-only",
+    "options:sync": "node scripts/sync-option-data.mjs",
+    "start": "node dist/main.js",
+    "start:dev": "nest start --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.0",
+    "@nestjs/core": "^11.0.0",
+    "@nestjs/platform-express": "^11.0.0",
+    "@prisma/adapter-pg": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "@prisma/client-runtime-utils": "^7.8.0",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "exceljs": "^4.4.0",
+    "googleapis": "^171.4.0",
+    "mammoth": "^1.12.0",
+    "mssql": "^12.5.2",
+    "pg": "^8.16.3",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@types/express": "^5.0.0",
+    "@types/mssql": "^12.3.0",
+    "@types/node": "^20",
+    "@types/pg": "^8.15.6",
+    "prisma": "^7.8.0",
+    "typescript": "^5"
+  }
+}

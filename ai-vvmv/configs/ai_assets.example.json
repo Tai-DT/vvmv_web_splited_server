@@ -1,0 +1,22 @@
+{
+  "input": {
+    "cleaned_jsonl": "/Volumes/FastVault-Apps/Projects/ai-vvmv/llm-dataset/cleaned/vvmv_cleaned.jsonl",
+    "raw_source_dir": "/Volumes/FastVault-Apps/Projects/ai-vvmv/vvmv-dumps"
+  },
+  "output_dir": "/Volumes/FastVault-Apps/Projects/ai-vvmv/llm-dataset/ai-assets",
+  "generation": {
+    "max_cargo_items_in_text": 8,
+    "instruction_samples_per_declaration": 3,
+    "mask_sensitive_training_data": true,
+    "progress_every": 1000
+  },
+  "rag": {
+    "default_top_k": 5,
+    "private_corpus": "private_rag/trade_knowledge_corpus.jsonl"
+  },
+  "model": {
+    "recommended_base": "Qwen2.5-7B-Instruct or Qwen3-8B-Instruct",
+    "fine_tune_method": "QLoRA",
+    "serving": "Ollama/vLLM/OpenAI-compatible API"
+  }
+}

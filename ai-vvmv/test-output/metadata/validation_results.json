@@ -1,0 +1,225 @@
+{
+  "cleaned_data": {
+    "total_records": 2,
+    "field_completeness": {
+      "declarationId": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "direction": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "taxCode": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "customsCode": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "header": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "vnaccs2": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "cargo": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "operationCode": {
+        "present": 2,
+        "missing": 0,
+        "completeness_rate": 100.0
+      },
+      "declarationDate": {
+        "present": 0,
+        "missing": 2,
+        "completeness_rate": 0.0
+      }
+    },
+    "data_consistency": {
+      "direction_distribution": {
+        "N": 1,
+        "X": 1
+      },
+      "customs_code_distribution": {
+        "01B1": 1,
+        "01DD": 1
+      },
+      "operation_code_distribution": {
+        "A41": 1,
+        "A12": 1
+      },
+      "tax_code_formats": {
+        "valid_10_digit": 2
+      }
+    },
+    "duplicate_analysis": {
+      "duplicate_declaration_ids": {},
+      "total_duplicate_records": 0,
+      "common_key_combinations": {
+        "('0101431115', '01B1', 'N', 'A41')": 1,
+        "('0101234567', '01DD', 'X', 'A12')": 1
+      }
+    },
+    "value_ranges": {
+      "cargo_quantity": {
+        "min": 2,
+        "max": 1000,
+        "mean": 451.75,
+        "negative_count": 0,
+        "zero_count": 0
+      },
+      "cargo_value": {
+        "min": 1192.35,
+        "max": 10000.0,
+        "mean": 5673.0875,
+        "negative_count": 0,
+        "zero_count": 0
+      },
+      "total_declaration_value": {
+        "min": 7880.56,
+        "max": 15000.0,
+        "mean": 11440.28,
+        "negative_count": 0,
+        "zero_count": 0
+      }
+    },
+    "format_validation": {
+      "date_format_issues": {},
+      "hs_code_validation": {
+        "valid_count": 4,
+        "invalid_count": 0,
+        "validation_rate": 100.0
+      }
+    }
+  },
+  "datasets": {
+    "classification": {
+      "total_samples": 2,
+      "required_fields_present": {
+        "instruction": {
+          "present": 2,
+          "missing": 0,
+          "completeness_rate": 100.0
+        },
+        "input": {
+          "present": 2,
+          "missing": 0,
+          "completeness_rate": 100.0
+        },
+        "output": {
+          "present": 2,
+          "missing": 0,
+          "completeness_rate": 100.0
+        }
+      },
+      "data_quality": {
+        "text_analysis": {
+          "avg_input_length": 235.5,
+          "avg_output_length": 43.0,
+          "empty_inputs": 0,
+          "empty_outputs": 0
+        }
+      },
+      "format_compliance": {
+        "json_validity": {
+          "valid_count": 2,
+          "invalid_count": 0,
+          "validity_rate": 100.0
+        },
+        "encoding_compliance": {
+          "issues_found": 0,
+          "compliance_rate": 100.0
+        }
+      }
+    },
+    "ner": {
+      "status": "missing"
+    },
+    "qa": {
+      "total_samples": 12,
+      "required_fields_present": {
+        "context": {
+          "present": 12,
+          "missing": 0,
+          "completeness_rate": 100.0
+        },
+        "question": {
+          "present": 12,
+          "missing": 0,
+          "completeness_rate": 100.0
+        },
+        "answer": {
+          "present": 12,
+          "missing": 0,
+          "completeness_rate": 100.0
+        }
+      },
+      "data_quality": {
+        "text_analysis": {
+          "avg_answer_length": 44.083333333333336,
+          "avg_question_length": 36.833333333333336,
+          "empty_answers": 0,
+          "empty_questions": 0
+        }
+      },
+      "format_compliance": {
+        "json_validity": {
+          "valid_count": 12,
+          "invalid_count": 0,
+          "validity_rate": 100.0
+        },
+        "encoding_compliance": {
+          "issues_found": 0,
+          "compliance_rate": 100.0
+        }
+      }
+    },
+    "generation": {
+      "total_samples": 2,
+      "required_fields_present": {
+        "input": {
+          "present": 2,
+          "missing": 0,
+          "completeness_rate": 100.0
+        },
+        "output": {
+          "present": 2,
+          "missing": 0,
+          "completeness_rate": 100.0
+        }
+      },
+      "data_quality": {
+        "text_analysis": {
+          "avg_input_length": 584.0,
+          "avg_output_length": 857.5,
+          "empty_inputs": 0,
+          "empty_outputs": 0
+        }
+      },
+      "format_compliance": {
+        "json_validity": {
+          "valid_count": 2,
+          "invalid_count": 0,
+          "validity_rate": 100.0
+        },
+        "encoding_compliance": {
+          "issues_found": 0,
+          "compliance_rate": 100.0
+        }
+      }
+    }
+  }
+}

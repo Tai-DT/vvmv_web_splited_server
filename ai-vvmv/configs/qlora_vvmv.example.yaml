@@ -1,0 +1,41 @@
+# Example QLoRA fine-tuning config for the generated instruction dataset.
+# This is a blueprint; adapt it to Axolotl, LLaMA-Factory, TRL, or Unsloth.
+
+base_model: Qwen/Qwen2.5-7B-Instruct
+dataset_path: /Volumes/FastVault-Apps/Projects/ai-vvmv/llm-dataset/ai-assets/training/instruction_tuning.jsonl
+output_dir: /Volumes/FastVault-Apps/Projects/ai-vvmv/models/vvmv-qwen2.5-7b-lora
+
+task_type: chat_instruction_tuning
+chat_template: qwen
+max_seq_length: 4096
+
+lora:
+  r: 16
+  alpha: 32
+  dropout: 0.05
+  target_modules:
+    - q_proj
+    - k_proj
+    - v_proj
+    - o_proj
+    - gate_proj
+    - up_proj
+    - down_proj
+
+training:
+  epochs: 2
+  learning_rate: 0.0002
+  batch_size_per_device: 2
+  gradient_accumulation_steps: 8
+  warmup_ratio: 0.03
+  weight_decay: 0.01
+  save_steps: 500
+  eval_steps: 500
+
+evaluation:
+  holdout_ratio: 0.02
+  metrics:
+    - exact_field_accuracy
+    - hallucination_check
+    - hs_code_accuracy
+    - risk_flag_accuracy

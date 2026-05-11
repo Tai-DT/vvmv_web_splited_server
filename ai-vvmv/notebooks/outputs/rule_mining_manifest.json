@@ -1,0 +1,22 @@
+{
+  "thresholds": {
+    "AUTOFILL": 0.99,
+    "SUGGEST": 0.8,
+    "HINT": 0.7
+  },
+  "outputs": {
+    "declaration_2way_rules": "/Volumes/FastVault-Apps/Projects/ai-vvmv/notebooks/outputs/declaration_2way_rules.csv",
+    "declaration_3way_rules": "/Volumes/FastVault-Apps/Projects/ai-vvmv/notebooks/outputs/declaration_3way_rules.csv",
+    "cargo_hs_rules": "/Volumes/FastVault-Apps/Projects/ai-vvmv/notebooks/outputs/cargo_hs_rules.csv",
+    "candidate_autofill_rules": "/Volumes/FastVault-Apps/Projects/ai-vvmv/notebooks/outputs/candidate_autofill_rules.csv",
+    "candidate_suggest_rules": "/Volumes/FastVault-Apps/Projects/ai-vvmv/notebooks/outputs/candidate_suggest_rules.csv",
+    "hs6_unit_price_baseline": "/Volumes/FastVault-Apps/Projects/ai-vvmv/notebooks/outputs/hs6_unit_price_baseline.csv"
+  },
+  "counts": {
+    "declaration_2way_rules": 202,
+    "declaration_3way_rules": 477,
+    "cargo_hs_rules": 3659,
+    "autofill_candidates": 2640,
+    "suggest_candidates": 1650
+  }
+}

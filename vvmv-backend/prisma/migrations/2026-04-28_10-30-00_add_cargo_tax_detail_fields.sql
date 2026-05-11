@@ -1,0 +1,7 @@
+ALTER TABLE "cargo_list"
+  ADD COLUMN IF NOT EXISTS "import_tax_rate" DOUBLE PRECISION,
+  ADD COLUMN IF NOT EXISTS "import_tax_amount" DOUBLE PRECISION,
+  ADD COLUMN IF NOT EXISTS "vat_tax_rate" DOUBLE PRECISION,
+  ADD COLUMN IF NOT EXISTS "vat_tax_amount" DOUBLE PRECISION,
+  ADD COLUMN IF NOT EXISTS "im_ex_duty_exemption_condition" TEXT,
+  ADD COLUMN IF NOT EXISTS "im_ex_duty_exemption_amount" DOUBLE PRECISION;

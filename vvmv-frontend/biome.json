@@ -1,0 +1,81 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.2.0/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"files": {
+		"includes": [
+			"app/**/*.ts",
+			"app/**/*.tsx",
+			"app/**/*.js",
+			"app/**/*.jsx",
+			"components/**/*",
+			"hooks/**/*",
+			"lib/**/*",
+			"test/**/*",
+			"types/**/*",
+			"docs/**/*",
+			"public/**/*",
+			"prisma/schema.prisma",
+			"prisma/seed.ts",
+			"prisma/migrations/**/*",
+			"*.ts",
+			"*.tsx",
+			"*.mjs",
+			"package.json",
+			"tsconfig.json",
+			"postcss.config.mjs",
+			"proxy.ts",
+			"vitest-env.d.ts",
+			".cursor/**/*"
+		]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"style": {
+				"noNonNullAssertion": "off",
+				"useTemplate": "off"
+			},
+			"suspicious": {
+				"noExplicitAny": "off",
+				"noImplicitAnyLet": "off",
+				"noArrayIndexKey": "off",
+				"useIterableCallbackReturn": "off",
+				"noGlobalIsNan": "off"
+			},
+			"a11y": {
+				"noLabelWithoutControl": "off",
+				"useButtonType": "off",
+				"useKeyWithClickEvents": "off",
+				"noStaticElementInteractions": "off",
+				"useAnchorContent": "off",
+				"noSvgWithoutTitle": "off",
+				"useValidAnchor": "off",
+				"useSemanticElements": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off",
+				"useUniqueElementIds": "off",
+				"noUnusedFunctionParameters": "off",
+				"noUnusedImports": "off",
+				"noUnusedVariables": "off",
+				"noNestedComponentDefinitions": "off",
+				"useHookAtTopLevel": "off",
+				"noInvalidUseBeforeDeclaration": "off"
+			},
+			"complexity": {
+				"noUselessFragments": "warn",
+				"noUselessStringRaw": "off",
+				"useOptionalChain": "off",
+				"noBannedTypes": "off"
+			},
+			"performance": {
+				"noImgElement": "off"
+			}
+		}
+	}
+}

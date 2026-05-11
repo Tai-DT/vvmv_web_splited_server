@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-05-09T18:22:19",
+  "input": "test-output/ocr/ocr_documents.jsonl",
+  "ok_documents": 1,
+  "error_documents": 0,
+  "document_types": {
+    "commercial_invoice": 1
+  },
+  "outputs": {
+    "rag": "test-output/ocr/ocr-assets/private_rag/ocr_corpus.jsonl",
+    "training": "test-output/ocr/ocr-assets/training/ocr_instruction_tuning.jsonl"
+  }
+}

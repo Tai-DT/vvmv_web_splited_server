@@ -1,0 +1,5 @@
+ALTER TABLE IF EXISTS "gemini_history"
+  ADD COLUMN IF NOT EXISTS "prompt_tokens" INTEGER,
+  ADD COLUMN IF NOT EXISTS "candidates_tokens" INTEGER,
+  ADD COLUMN IF NOT EXISTS "total_tokens" INTEGER,
+  ADD COLUMN IF NOT EXISTS "duration_ms" INTEGER;

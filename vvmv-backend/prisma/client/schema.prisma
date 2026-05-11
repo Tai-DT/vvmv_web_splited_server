@@ -1,0 +1,1562 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                         String                @id
+  name                       String?
+  email                      String                @unique
+  emailVerified              Boolean               @default(false)
+  image                      String?
+  createdAt                  DateTime              @default(now())
+  updatedAt                  DateTime              @updatedAt
+  displayUsername            String?
+  taxNumber                  String?
+  username                   String?               @unique
+  banExpires                 DateTime?
+  banReason                  String?
+  banned                     Boolean               @default(false)
+  erpAccount                 String?
+  role                       UserRole              @default(STAFF)
+  site                       Site?
+  accounts                   Account[]
+  apiKeys                    ApiKey[]
+  companyColors              CompanyColor[]
+  containerSizeConfigs       ContainerSizeConfig[] @relation("ContainerSizeConfigCreator")
+  customsWarehouses          CustomsWarehouse[]    @relation("CustomsWarehouseCreator")
+  fieldOptions               FieldOption[]         @relation("FieldOptionCreator")
+  fieldTemplates             FieldTemplate[]
+  followUps                  FollowUp[]
+  foreignPorts               ForeignPort[]         @relation("ForeignPortCreator")
+  ops                        Ops[]                 @relation("OpsCreator")
+  partnersMasterData         PartnersMasterData[]
+  paymentRequests            PaymentRequest[]
+  pickOrLiftPlaces           PickOrLiftPlace[]     @relation("PickOrLiftPlaceCreator")
+  sessions                   Session[]
+  shippingLines              ShippingLine[]        @relation("ShippingLineCreator")
+  tablePreferences           TablePreference[]
+  teamLeaderships            TeamLeader[]          @relation("TeamLeaders")
+  teamMemberships            TeamMember[]          @relation("TeamMembers")
+  truckingFollowUps          TruckingFollowUp[]    @relation("TruckingFollowUpToUser")
+  truckingFollowUpsAsHandler TruckingFollowUp[]    @relation("TruckingFollowUpHandler")
+  truckingNumbers            TruckingNumber[]
+  departmentAssignments      UserDepartment[]      @relation("UserDepartments")
+  reviewedVendorCosts        VendorCost[]          @relation("VendorCostReviewer")
+  vendors                    Vendor[]              @relation("VendorCreator")
+  warehouseConfigs           WarehouseConfig[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  token     String   @unique
+  expiresAt DateTime
+  userId    String
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  accountId             String
+  providerId            String
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId])
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([identifier, value])
+  @@map("verification")
+}
+
+model UserDepartment {
+  id           String     @id @default(uuid())
+  userId       String     @map("user_id")
+  departmentId String     @map("department_id")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  department   Department @relation("DepartmentManagers", fields: [departmentId], references: [id], onDelete: Cascade)
+  user         User       @relation("UserDepartments", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, departmentId])
+  @@index([userId])
+  @@index([departmentId])
+  @@map("user_department")
+}
+
+model Department {
+  id          String           @id @default(uuid())
+  name        String
+  description String?
+  site        Site
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  teams       Team[]
+  managers    UserDepartment[] @relation("DepartmentManagers")
+
+  @@unique([name, site])
+  @@map("department")
+}
+
+model Team {
+  id           String       @id @default(uuid())
+  name         String
+  site         Site
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+  departmentId String?      @map("department_id")
+  department   Department?  @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  leaders      TeamLeader[]
+  members      TeamMember[]
+
+  @@index([departmentId])
+  @@map("team")
+}
+
+model TeamLeader {
+  id        String   @id @default(uuid())
+  teamId    String   @map("team_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation("TeamLeaders", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([teamId])
+  @@index([userId])
+  @@map("team_leader")
+}
+
+model TeamMember {
+  id        String   @id @default(uuid())
+  teamId    String   @map("team_id")
+  userId    String   @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation("TeamMembers", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([teamId])
+  @@index([userId])
+  @@map("team_member")
+}
+
+model FollowUp {
+  id                     String                  @id @default(uuid())
+  botMessage             String?                 @map("bot_message")
+  operationType          OperationType?          @map("operation_type")
+  taxCode                String?                 @map("tax_code")
+  companyName            String?                 @map("company_name")
+  jobNumber              String?                 @map("job_number")
+  driveUrl               String?                 @map("drive_url")
+  localPath              String?                 @map("local_path")
+  notes                  String?
+  cargoType              String?                 @map("cargo_type")
+  cbm                    Float?
+  deliveryDate           DateTime?               @map("delivery_date")
+  truckNumber            String?                 @map("truck_number")
+  location               String?
+  supervisionGate        String?                 @map("supervision_gate")
+  handler                String?
+  startTime              DateTime?               @map("start_time")
+  endTime                DateTime?               @map("end_time")
+  poNumber               String?                 @map("po_number")
+  note2                  String?                 @map("note_2")
+  note3                  String?                 @map("note_3")
+  shmtDate               DateTime?               @map("shmt_date")
+  domain                 Site?
+  arNumber               String?                 @map("ar_number")
+  createdAt              DateTime                @default(now()) @map("created_at")
+  updatedAt              DateTime                @updatedAt @map("updated_at")
+  createdBy              String                  @map("created_by")
+  coNumber               String?                 @map("co_number")
+  loadingLocation        String?                 @map("loading_location")
+  pickupLocation         String?                 @map("pickup_location")
+  taxService             String?                 @map("tax_service")
+  transportDate          DateTime?               @map("transport_date")
+  transportMethod        String?                 @map("transport_method")
+  unit                   String?
+  serviceMode            String?                 @map("service_mode")
+  workType               String?                 @map("work_type")
+  pol                    String?
+  pod                    String?
+  warehouse              String?
+  authority              String?
+  billOrBooking          String?                 @map("bill_or_booking")
+  quantity               Int?
+  supplier               String?
+  grossWeight            Float?                  @map("gross_weight")
+  invoice                String?
+  requestTruckingNo      String?                 @map("request_trucking_no")
+  etaEtd                 DateTime?               @map("eta_etd")
+  pickUpTime             String?                 @map("pick_up_time")
+  isDeleted              Boolean                 @default(false) @map("is_deleted")
+  jobPriority            Int?                    @default(3) @map("job_priority")
+  isFinished             Boolean                 @default(false) @map("is_finished")
+  commodityName          String?                 @map("commodity_name")
+  cargoLists             CargoList[]
+  cerOfOrigins           CerOfOrigin[]
+  containers             Container[]
+  declarations           Declaration[]
+  ecusDeclarationMirrors EcusDeclarationMirror[]
+  user                   User                    @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  activityLogs           FollowUpActivityLog[]
+  cdsInfo                FollowUpCdsInfo?
+  paymentRequests        PaymentRequest[]
+
+  @@map("follow_up")
+}
+
+model FollowUpCdsInfo {
+  id                                String                    @id @default(uuid())
+  followUpId                        String                    @unique @map("follow_up_id")
+  operationCode                     String?                   @map("operation_code")
+  transportMethodCode               String?                   @map("transport_method_code")
+  customsCode                       String?                   @map("customs_code")
+  personOrganizationClassification  String?                   @map("person_organization_classification")
+  declarationProcessingDeptCode     String?                   @map("declaration_processing_dept_code")
+  importExportUnitName              String?                   @map("import_export_unit_name")
+  importExportBusinessAddress       String?                   @map("import_export_business_address")
+  partnerName                       String?                   @map("partner_name")
+  partnerAddress1                   String?                   @map("partner_address_1")
+  partnerAddress2                   String?                   @map("partner_address_2")
+  partnerAddress3                   String?                   @map("partner_address_3")
+  partnerAddress4                   String?                   @map("partner_address_4")
+  exportCountryCode                 String?                   @map("export_country_code")
+  billOfLading                      String?                   @map("bill_of_lading")
+  packageQuantity                   Float?                    @map("package_quantity")
+  packageType                       String?                   @map("package_type")
+  grossWeightTotal                  Float?                    @map("gross_weight_total")
+  weightUnit                        String?                   @map("weight_unit")
+  containerQuantity                 Float?                    @map("container_quantity")
+  warehouseLocationCode             String?                   @map("warehouse_location_code")
+  unloadingLocationCode             String?                   @map("unloading_location_code")
+  loadingLocationCode               String?                   @map("loading_location_code")
+  transportVehicleCode              String?                   @map("transport_vehicle_code")
+  departureArrivalDate              String?                   @map("departure_arrival_date")
+  licenseNumber                     String?                   @map("license_number")
+  warehouseLocationName             String?                   @map("warehouse_location_name")
+  unloadingLocationName             String?                   @map("unloading_location_name")
+  loadingLocationName               String?                   @map("loading_location_name")
+  transportVehicleName              String?                   @map("transport_vehicle_name")
+  commercialInvoice                 String?                   @map("commercial_invoice")
+  invoiceFormClassificationCode     String?                   @map("invoice_form_classification_code")
+  commercialInvoiceDate             String?                   @map("commercial_invoice_date")
+  invoicePriceCondition             String?                   @map("invoice_price_condition")
+  paymentMethod                     String?                   @map("payment_method")
+  invoiceClassificationCode         String?                   @map("invoice_classification_code")
+  declaredValue                     Float?                    @map("declared_value")
+  totalInvoiceValue                 Float?                    @map("total_invoice_value")
+  totalTaxableValue                 Float?                    @map("total_taxable_value")
+  invoiceCurrency                   String?                   @map("invoice_currency")
+  taxableValueCurrencyCode          String?                   @map("taxable_value_currency_code")
+  valuationDeclarationTypeCode      String?                   @map("valuation_declaration_type_code")
+  transportFee                      Float?                    @map("transport_fee")
+  transportFeeClassificationCode    String?                   @map("transport_fee_classification_code")
+  transportFeeCurrencyCode          String?                   @map("transport_fee_currency_code")
+  insuranceFee                      Float?                    @map("insurance_fee")
+  insuranceFeeClassificationCode    String?                   @map("insurance_fee_classification_code")
+  insuranceFeeCurrencyCode          String?                   @map("insurance_fee_currency_code")
+  taxPayer                          String?                   @map("tax_payer")
+  taxPaymentDeadlineCode            String?                   @map("tax_payment_deadline_code")
+  taxDestinationLocation            String?                   @map("tax_destination_location")
+  estimatedArrivalAtDestinationDate String?                   @map("estimated_arrival_at_destination_date")
+  transportDepartureDate            String?                   @map("transport_departure_date")
+  note                              String?
+  contractNumber                    String?                   @map("contract_number")
+  contractDate                      String?                   @map("contract_date")
+  contractGoodsDate                 String?                   @map("contract_goods_date")
+  importLicense                     String?                   @map("import_license")
+  internalBusinessManagementNumber  String?                   @map("internal_business_management_number")
+  otherLegalDocumentCode            String?                   @map("other_legal_document_code")
+  valuationDeclarationDetail        String?                   @map("valuation_declaration_detail")
+  truckLoadingLocationCode          String?                   @map("truck_loading_location_code")
+  truckLoadingLocationName          String?                   @map("truck_loading_location_name")
+  createdAt                         DateTime                  @default(now()) @map("created_at")
+  updatedAt                         DateTime                  @updatedAt @map("updated_at")
+  airportSupervisionEnabled         Boolean?                  @map("airport_supervision_enabled")
+  branchNumberPart1                 String?                   @map("branch_number_part_1")
+  branchNumberPart2                 String?                   @map("branch_number_part_2")
+  businessTypeGroup                 String?                   @map("business_type_group")
+  cargoClassificationCode           String?                   @map("cargo_classification_code")
+  cdsStatus                         CdsStatus                 @default(DRAFT) @map("cds_status")
+  correspondingDeclarationNumber    String?                   @map("corresponding_declaration_number")
+  creditLimitDocumentNumber         String?                   @map("credit_limit_document_number")
+  creditLimitDocumentSymbol         String?                   @map("credit_limit_document_symbol")
+  creditLimitIssueYear              String?                   @map("credit_limit_issue_year")
+  customsDeclarantCode              String?                   @map("customs_declarant_code")
+  declarationNumber                 String?                   @map("declaration_number")
+  declarationSequenceNumber         String?                   @map("declaration_sequence_number")
+  ecusDeclarationId                 Int?                      @map("ecus_declaration_id")
+  electronicInvoiceReceiptNumber    String?                   @map("electronic_invoice_receipt_number")
+  entrustedExporterName             String?                   @map("entrusted_exporter_name")
+  entrustedImporterCode             String?                   @map("entrusted_importer_code")
+  entrustedImporterName             String?                   @map("entrusted_importer_name")
+  exchangeRate                      Float?                    @map("exchange_rate")
+  expectedDeclarationDate           String?                   @map("expected_declaration_date")
+  exporterCode                      String?                   @map("exporter_code")
+  exporterPostalCode                String?                   @map("exporter_postal_code")
+  firstDeclarationNumber            String?                   @map("first_declaration_number")
+  guaranteeBankCode                 String?                   @map("guarantee_bank_code")
+  guaranteeDocumentNumber           String?                   @map("guarantee_document_number")
+  guaranteeDocumentSymbol           String?                   @map("guarantee_document_symbol")
+  importerCode                      String?                   @map("importer_code")
+  importerPhone                     String?                   @map("importer_phone")
+  importerPostalCode                String?                   @map("importer_postal_code")
+  inspectionResultCode              String?                   @map("inspection_result_code")
+  insuranceRegistrationNumber       String?                   @map("insurance_registration_number")
+  netWeight                         Float?                    @map("net_weight")
+  packageMarks                      String?                   @map("package_marks")
+  reExportDeadline                  String?                   @map("re_export_deadline")
+  registeredAt                      DateTime?                 @map("registered_at")
+  registeredBy                      String?                   @map("registered_by")
+  seaportSupervisionEnabled         Boolean?                  @map("seaport_supervision_enabled")
+  taxSubstituteBankCode             String?                   @map("tax_substitute_bank_code")
+  valuationSummaryReceiptNumber     String?                   @map("valuation_summary_receipt_number")
+  releaseBeforePermitCode           String?                   @map("release_before_permit_code")
+  truckLoadingLocationAddress       String?                   @map("truck_loading_location_address")
+  billItemRows                      CdsBillItem[]
+  valuationAdjustmentRows           CdsValuationAdjustment[]
+  transportScheduleRows             CdsTransportSchedule[]
+  importLicenseRows                 CdsImportLicense[]
+  otherLegalDocumentRows            CdsOtherLegalDocument[]
+  electronicAttachmentRows          CdsElectronicAttachment[]
+  followUp                          FollowUp                  @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+
+  @@index([followUpId])
+  @@map("follow_up_cds_info")
+}
+
+model CdsBillItem {
+  id         String          @id @default(uuid())
+  cdsInfoId  String          @map("cds_info_id")
+  sortOrder  Int             @default(0) @map("sort_order")
+  billNumber String?         @map("bill_number")
+  billDate   String?         @map("bill_date")
+  hawbNumber String?         @map("hawb_number")
+  mawbYear   String?         @map("mawb_year")
+  cdsInfo    FollowUpCdsInfo @relation(fields: [cdsInfoId], references: [id], onDelete: Cascade)
+
+  @@index([cdsInfoId, sortOrder])
+  @@map("cds_bill_item")
+}
+
+model CdsValuationAdjustment {
+  id                 String          @id @default(uuid())
+  cdsInfoId          String          @map("cds_info_id")
+  sortOrder          Int             @default(0) @map("sort_order")
+  nameCode           String?         @map("name_code")
+  classificationCode String?         @map("classification_code")
+  currencyCode       String?         @map("currency_code")
+  adjustmentValue    Float?          @map("adjustment_value")
+  allocationRatio    Float?          @map("allocation_ratio")
+  cdsInfo            FollowUpCdsInfo @relation(fields: [cdsInfoId], references: [id], onDelete: Cascade)
+
+  @@index([cdsInfoId, sortOrder])
+  @@map("cds_valuation_adjustment")
+}
+
+model CdsTransportSchedule {
+  id            String          @id @default(uuid())
+  cdsInfoId     String          @map("cds_info_id")
+  sortOrder     Int             @default(0) @map("sort_order")
+  locationCode  String?         @map("location_code")
+  locationName  String?         @map("location_name")
+  arrivalDate   String?         @map("arrival_date")
+  departureDate String?         @map("departure_date")
+  cdsInfo       FollowUpCdsInfo @relation(fields: [cdsInfoId], references: [id], onDelete: Cascade)
+
+  @@index([cdsInfoId, sortOrder])
+  @@map("cds_transport_schedule")
+}
+
+model CdsImportLicense {
+  id            String          @id @default(uuid())
+  cdsInfoId     String          @map("cds_info_id")
+  sortOrder     Int             @default(0) @map("sort_order")
+  licenseNumber String?         @map("license_number")
+  cdsInfo       FollowUpCdsInfo @relation(fields: [cdsInfoId], references: [id], onDelete: Cascade)
+
+  @@index([cdsInfoId, sortOrder])
+  @@map("cds_import_license")
+}
+
+model CdsOtherLegalDocument {
+  id           String          @id @default(uuid())
+  cdsInfoId    String          @map("cds_info_id")
+  sortOrder    Int             @default(0) @map("sort_order")
+  documentCode String?         @map("document_code")
+  cdsInfo      FollowUpCdsInfo @relation(fields: [cdsInfoId], references: [id], onDelete: Cascade)
+
+  @@index([cdsInfoId, sortOrder])
+  @@map("cds_other_legal_document")
+}
+
+model CdsElectronicAttachment {
+  id                    String          @id @default(uuid())
+  cdsInfoId             String          @map("cds_info_id")
+  sortOrder             Int             @default(0) @map("sort_order")
+  attachmentNumber      String?         @map("attachment_number")
+  attachmentDescription String?         @map("attachment_description")
+  cdsInfo               FollowUpCdsInfo @relation(fields: [cdsInfoId], references: [id], onDelete: Cascade)
+
+  @@index([cdsInfoId, sortOrder])
+  @@map("cds_electronic_attachment")
+}
+
+model TruckingFollowUp {
+  id                    String                @id @default(uuid())
+  botMessage            String?               @map("bot_message")
+  handler               String?
+  requestNumber         String?               @unique @map("request_number")
+  jobNumber             String?               @map("job_number")
+  serviceMode           String?               @map("service_mode")
+  cbm                   Float?
+  grossWeight           Float?                @map("gross_weight")
+  quantity              Int?
+  createdAt             DateTime              @default(now()) @map("created_at")
+  updatedAt             DateTime?             @updatedAt @map("updated_at")
+  companyName           String?               @map("company_name")
+  vendor                String?
+  billOrBooking         String?               @map("bill_or_booking")
+  closingTime           DateTime?             @map("closing_time")
+  cutOffTime            DateTime?             @map("cut_off_time")
+  vesselName            String?               @map("vessel_name")
+  veselNumber           String?               @map("vesel_number")
+  carrierName           String?               @map("carrier_name")
+  routineDetail         String?               @map("routine_detail")
+  note                  String?
+  note2                 String?
+  note3                 String?
+  note4                 String?
+  note5                 String?
+  fromLocation          String?               @map("from_location")
+  toLocation            String?               @map("to_location")
+  pickOrLiftPlace       String?               @map("pick_or_lift_place")
+  commodityName         String?               @map("commodity_name")
+  warehouse             String?
+  pickUpTime            String?               @map("pick_up_time")
+  ccgh                  String[]              @default([])
+  authority             String?
+  maLo                  String?               @map("ma_lo")
+  transitPort           String?               @map("transit_port")
+  destinationPort       String?               @map("destination_port")
+  deliveryContactDetail String?               @map("delivery_contact_detail")
+  eportService          String?               @map("eport_service")
+  maNhanConmt           String?               @map("ma_nhan_conmt")
+  soLenh                String?               @map("so_lenh")
+  ngatDienDate          DateTime?             @map("ngat_dien_date")
+  isDeleted             Boolean               @default(false) @map("is_deleted")
+  createdBy             String?               @map("created_by")
+  domain                String?               @map("domain")
+  isFinished            Boolean?              @default(false) @map("is_finished")
+  parentJobNumber       String?               @map("parent_job_number")
+  operationType         OperationType?        @map("operation_type")
+  implementationDate    DateTime?             @map("implementation_date")
+  taxCode               String?               @map("tax_code")
+  transactionCode       String?               @map("transaction_code")
+  amount                Float?
+  invoiceTaxCode        String?               @map("invoice_tax_code")
+  ops                   String?
+  bbbt                  String?
+  clientName            String?               @map("client_name")
+  donViKhuTrung         String?               @map("don_vi_khu_trung")
+  hsCode                String?               @map("hs_code")
+  payDate               DateTime?             @map("pay_date")
+  temperature           Float?
+  driveUrl              String?               @map("drive_url")
+  localPath             String?               @map("local_path")
+  truckType             String?               @map("truck_type")
+  eportBooking          String?               @map("eport_booking")
+  bienBanBT             Boolean?              @default(false) @map("bien_ban_bt")
+  checkNhapKho          String?               @default("CHƯA NHẬP KHO") @map("check_nhap_kho")
+  pvst                  Boolean?              @default(false) @map("pvst")
+  containers            Container[]
+  declarations          Declaration[]
+  fcrs                  FCR[]
+  paymentRequests       PaymentRequest[]
+  activityLogs          TruckingActivityLog[]
+  user                  User?                 @relation("TruckingFollowUpToUser", fields: [createdBy], references: [id])
+  handlerUser           User?                 @relation("TruckingFollowUpHandler", fields: [handler], references: [id])
+  vendorCosts           VendorCost[]
+
+  @@map("trucking_follow_up")
+}
+
+model CdsLookupSnapshot {
+  id          String   @id @default(uuid())
+  source      String?
+  generatedAt DateTime @default(now()) @map("generated_at")
+  importedAt  DateTime @default(now()) @map("imported_at")
+  isActive    Boolean  @default(true) @map("is_active")
+
+  @@index([isActive, generatedAt])
+  @@map("cds_lookup_snapshot")
+}
+
+model CdsOperationCodeLookup {
+  code      String @id
+  name      String
+  direction String @default("unknown")
+
+  @@index([direction])
+  @@map("cds_operation_code_lookup")
+}
+
+model CdsPermitLookup {
+  id                      String  @id
+  kind                    String
+  permitTypeCode          String? @map("permit_type_code")
+  permitTypeName          String? @map("permit_type_name")
+  permitNo                String  @map("permit_no")
+  permitIssueDate         String? @map("permit_issue_date")
+  permitExpiryDate        String? @map("permit_expiry_date")
+  declarationCount        Int?    @map("declaration_count")
+  firstDeclarationDate    String? @map("first_declaration_date")
+  lastDeclarationDate     String? @map("last_declaration_date")
+  sampleDeclarationNo     String? @map("sample_declaration_no")
+  sampleCustomsCode       String? @map("sample_customs_code")
+  isExplicitImportLicense Boolean @default(false) @map("is_explicit_import_license")
+
+  @@unique([kind, permitTypeCode, permitNo])
+  @@index([kind])
+  @@index([permitTypeCode])
+  @@index([permitNo])
+  @@map("cds_permit_lookup")
+}
+
+model CdsPermitTypeLookup {
+  code String @id
+  name String
+
+  @@map("cds_permit_type_lookup")
+}
+
+model CdsProcessingDepartmentLookup {
+  code           String
+  customsCode    String  @map("customs_code")
+  name           String
+  operationCodes Json?   @map("operation_codes")
+  allowImport    Boolean @default(false) @map("allow_import")
+  allowExport    Boolean @default(false) @map("allow_export")
+
+  @@id([code, customsCode])
+  @@index([customsCode])
+  @@map("cds_processing_department_lookup")
+}
+
+model CdsFieldOptionLookup {
+  id        String  @id @default(uuid())
+  field     String
+  value     String
+  label     String?
+  address   String?
+  count     Int     @default(0)
+  direction String  @default("unknown")
+  source    String  @default("snapshot")
+
+  @@unique([field, value, direction, source])
+  @@index([field, count])
+  @@index([field, value])
+  @@map("cds_field_option_lookup")
+}
+
+model CdsElectronicAttachmentLookup {
+  id                    String  @id @default(uuid())
+  attachmentTypeCode    String  @map("attachment_type_code")
+  attachmentNumber      String? @map("attachment_number")
+  attachmentDescription String? @map("attachment_description")
+  count                 Int     @default(0)
+
+  @@unique([attachmentTypeCode, attachmentNumber])
+  @@index([attachmentTypeCode])
+  @@map("cds_electronic_attachment_lookup")
+}
+
+model Declaration {
+  id                    String                 @id @default(uuid())
+  followUpId            String?                @map("follow_up_id")
+  declarationNumber     String?                @map("declaration_number")
+  batch                 String?
+  authority             String?
+  workType              String?                @map("work_type")
+  declarationDate       DateTime?              @map("declaration_date")
+  grossWeight           Float?                 @map("gross_weight")
+  quantity              Int?
+  unit                  String?
+  etaEtd                DateTime?              @map("eta_etd")
+  billBooking           String?                @map("bill_booking")
+  invoice               String?
+  pol                   String?
+  pod                   String?
+  warehouse             String?
+  vehicle               String?
+  mstClient             String?                @map("mst_client")
+  clientName            String?                @map("client_name")
+  partner               String?
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  driveUrl              String?                @map("drive_url")
+  customsCode           String?                @map("customs_code")
+  diaDiemLuuKho         String?                @map("dia_diem_luu_kho")
+  diaDiemBaoThue        String?                @map("dia_diem_bao_thue")
+  containers            String?
+  attachDocuments       String?                @map("attach_documents")
+  kvgsDate              DateTime?              @map("kvgs_date")
+  totalTaxAmount        Float?                 @map("total_tax_amount")
+  vatTax                Float?                 @map("vat_tax")
+  ieTax                 Float?                 @map("ie_tax")
+  taxRemark             String?                @map("tax_remark")
+  tqDate                DateTime?              @map("tq_date") @db.Timestamp(6)
+  truckingFollowUpId    String?                @map("trucking_follow_up_id")
+  firstCds              String?                @map("first_cds")
+  mvUrl                 String?                @map("mv_url")
+  containerLinks        ContainerDeclaration[]
+  followUp              FollowUp?              @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+  truckingFollowUp      TruckingFollowUp?      @relation(fields: [truckingFollowUpId], references: [id], onDelete: Cascade)
+  ecusDeclarationMirror EcusDeclarationMirror?
+
+  @@index([followUpId])
+  @@index([truckingFollowUpId])
+  @@map("declaration")
+}
+
+model EcusDeclarationMirror {
+  id                  String         @id @default(uuid())
+  declarationNumber   String?        @map("declaration_number")
+  firstCds            String?        @map("first_cds")
+  mstClient           String?        @map("mst_client")
+  clientName          String?        @map("client_name")
+  jobNumber           String?        @map("job_number")
+  followUpId          String?        @map("follow_up_id")
+  sourceDeclarationId String?        @unique @map("source_declaration_id")
+  operationType       OperationType? @map("operation_type")
+  declarationDate     DateTime?      @map("declaration_date")
+  customsCode         String?        @map("customs_code")
+  billBooking         String?        @map("bill_booking")
+  invoice             String?
+  partner             String?
+  sourceDatabase      String?        @map("source_database")
+  sourceType          String         @default("RPA_DECLARATION") @map("source_type")
+  syncedAt            DateTime       @default(now()) @map("synced_at")
+  createdAt           DateTime       @default(now()) @map("created_at")
+  updatedAt           DateTime       @default(now()) @updatedAt @map("updated_at")
+  followUp            FollowUp?      @relation(fields: [followUpId], references: [id])
+  sourceDeclaration   Declaration?   @relation(fields: [sourceDeclarationId], references: [id])
+
+  @@index([declarationNumber])
+  @@index([firstCds])
+  @@index([mstClient])
+  @@index([followUpId])
+  @@index([jobNumber])
+  @@index([operationType])
+  @@index([syncedAt])
+  @@map("ecus_declaration_mirror")
+}
+
+model Container {
+  id                  String                 @id @default(uuid())
+  followUpId          String?                @map("follow_up_id")
+  containerNo         String?                @map("container_no")
+  sealNo              String?                @map("seal_no")
+  createdAt           DateTime               @default(now()) @map("created_at")
+  updatedAt           DateTime               @updatedAt @map("updated_at")
+  grossWeight         Float?                 @map("gross_weight")
+  quantity            Int?                   @default(1) @map("quantity")
+  containerSize       String?                @map("container_size")
+  truckingFollowUpId  String?                @map("trucking_follow_up_id")
+  kc                  String?                @map("kc")
+  closingTime         DateTime?              @map("closing_time")
+  cutOffTime          DateTime?              @map("cut_off_time")
+  vesselName          String?                @map("vessel_name")
+  veselNumber         String?                @map("vesel_number")
+  pickOrLiftPlace     String?                @map("pick_or_lift_place")
+  maLo                String?                @map("ma_lo")
+  vatTaxCode          String?                @map("vat_tax_code")
+  tareWeight          Float?                 @map("tare_weight")
+  noEport             Boolean                @default(false) @map("no_eport")
+  masGross            Float?                 @map("mas_gross")
+  implementationDate  DateTime?              @map("implementation_date")
+  plateNumber         String?                @map("plate_number")
+  vendor              String?
+  warehouse           String?
+  containerType       String?                @map("container_type")
+  cutOffAtPort        DateTime?              @map("cut_off_at_port")
+  blockCode           String?                @map("block_code")
+  emptyReturnDeadline String?                @map("empty_return_deadline")
+  portLocation        String?                @map("port_location")
+  soDangKy            String?                @map("so_dang_ky")
+  podUrl              String?                @map("pod_url")
+  packageQty          Float?                 @map("package_qty")
+  followUp            FollowUp?              @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+  truckingFollowUp    TruckingFollowUp?      @relation(fields: [truckingFollowUpId], references: [id], onDelete: Cascade)
+  declarationLinks    ContainerDeclaration[]
+  fcrs                FCR[]
+
+  @@index([followUpId])
+  @@index([truckingFollowUpId])
+  @@map("container")
+}
+
+model ContainerDeclaration {
+  id            String      @id @default(uuid())
+  containerId   String      @map("container_id")
+  declarationId String      @map("declaration_id")
+  createdAt     DateTime    @default(now()) @map("created_at")
+  container     Container   @relation(fields: [containerId], references: [id], onDelete: Cascade)
+  declaration   Declaration @relation(fields: [declarationId], references: [id], onDelete: Cascade)
+
+  @@unique([containerId, declarationId])
+  @@index([containerId])
+  @@index([declarationId])
+  @@map("container_declaration")
+}
+
+model FCR {
+  id                       String            @id @default(uuid())
+  fcrNumber                String?           @map("fcr_number")
+  tType                    String?           @map("t_type")
+  tTypeC                   String?           @map("t_type_c")
+  plateNumber              String?           @map("plate_number")
+  truckType                String?           @map("truck_type")
+  truckingFollowUpId       String?           @map("trucking_follow_up_id")
+  shipper                  String?           @map("shipper")
+  cbm                      Float?
+  grossWeight              Float?            @map("gross_weight")
+  quantity                 Float?
+  pickupAt                 String?           @map("pickup_at")
+  deliveryAt               String?           @map("delivery_at")
+  notes                    String?
+  containerNo              String?           @map("container_no")
+  isCombined               Boolean?          @default(false) @map("is_combined")
+  driver                   String?
+  vendor                   String?
+  implementationDate       DateTime?         @map("implementation_date")
+  containerId              String?           @map("container_id")
+  service                  String?
+  truckingNumberId         String?           @map("trucking_number_id")
+  tripNumber               Int               @default(1) @map("trip_number")
+  warehouse                String?
+  defaultWarehouseConfigId String?           @map("default_warehouse_config_id")
+  vehicleInfo              String?           @map("vehicle_info")
+  bienBanBT                Boolean?          @default(false) @map("bien_ban_bt")
+  ops                      String?
+  container                Container?        @relation(fields: [containerId], references: [id])
+  truckingFollowUp         TruckingFollowUp? @relation(fields: [truckingFollowUpId], references: [id], onDelete: Cascade)
+  truckingNumber           TruckingNumber?   @relation(fields: [truckingNumberId], references: [id])
+  vendorCosts              VendorCost[]
+
+  @@index([truckingFollowUpId])
+  @@index([containerId])
+  @@index([truckingNumberId])
+  @@map("fcr")
+}
+
+model CerOfOrigin {
+  id               String    @id @default(uuid())
+  followUpId       String    @map("follow_up_id")
+  coNo             String?   @map("co_no")
+  coDate           DateTime? @map("co_date")
+  issuedDepartment String?   @map("issued_department")
+  issuedPlace      String?   @map("issued_place")
+  form             String?
+  importer         String?
+  exporter         String?
+  invoice          String?
+  totalLines       String?   @map("total_lines")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  driveUrl         String?   @map("drive_url")
+  followUp         FollowUp  @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+
+  @@index([followUpId])
+  @@map("cer_of_origin")
+}
+
+model FieldTemplate {
+  id             String   @id @default(uuid())
+  userId         String   @map("user_id")
+  name           String
+  description    String?
+  selectedFields String[] @default([])
+  isDefault      Boolean  @default(false)
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  fieldData      Json?    @map("field_data")
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+  @@index([userId])
+  @@index([userId, isDefault])
+  @@map("field_template")
+}
+
+model TablePreference {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  tableKey    String   @map("table_key")
+  preferences Json
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tableKey])
+  @@index([userId])
+  @@map("table_preference")
+}
+
+model Invoker {
+  id              BigInt    @id @default(autoincrement())
+  taskName        String    @map("task_name")
+  jobNo           String?   @map("job_no")
+  invoiceNo       String?   @map("invoice_no")
+  userAccount     String?   @map("user_account")
+  status          String?
+  message         String?
+  machineName     String?   @map("machine_name")
+  createdTime     DateTime  @default(now()) @map("created_time")
+  startedTime     DateTime? @map("started_time") @db.Timestamptz(6)
+  completedTime   DateTime? @map("completed_time") @db.Timestamptz(6)
+  taskContent     String?   @map("task_content")
+  creator         String
+  source          String?
+  domain          String?
+  ccMailList      String?   @map("cc_mail_list")
+  countAssignTask Int?      @map("count_assign_task")
+  folderId        String?   @map("folder_id")
+  isDeleted       Boolean?  @default(false) @map("is_deleted")
+
+  @@map("invoker")
+}
+
+model InvokerFollowUp {
+  id                     BigInt   @id @default(autoincrement())
+  invokerId              Int      @map("invoker_id")
+  deptName               String?  @map("dept_name")
+  sheetName              String?  @map("sheet_name")
+  soJob                  String?  @map("so_job")
+  jobTrucking            String?  @map("job_trucking")
+  fcr                    String?
+  xuatNhap               String?  @map("xuat__nhap")
+  serviceMode            String?  @map("service_mode")
+  mst                    String?
+  congTy                 String?  @map("cong_ty")
+  localPath              String?  @map("local_path")
+  notes                  String?
+  invoice                String?
+  soToKhai               String?  @map("so_to_khai")
+  luong                  String?
+  coQuanHaiQuanNhaNuoc   String?  @map("co_quan_hai_quan__nha_nuoc")
+  loaiHinhFormCongViec   String?  @map("loai_hinh__form__cong_viec")
+  ngayToKhai             String?  @map("ngay_to_khai")
+  loaiHangHoa            String?  @map("loai_hang_hoa")
+  billBooking            String?  @map("bill__booking")
+  etaEtd                 String?  @map("eta__etd")
+  qtySoKien              String?  @map("qty__so_kien")
+  unit                   String?
+  gW                     String?  @map("g_w")
+  cbm                    String?
+  soLuongXLoaiCont       String?  @map("so_luong_x_loai_cont")
+  soCont                 String?  @map("so_cont")
+  pod                    String?
+  chiTietDiaDiemNhanHang String?  @map("chi_tiet_dia_diem_nhan_hang")
+  ngayGiaoNgayGui        String?  @map("ngay_giao__ngay_gui")
+  soXe                   String?  @map("so_xe")
+  noiNhanRongNoiHaRong   String?  @map("noi_nhan_rong__noi_ha_rong")
+  pol                    String?
+  chiTietDiaDiemXepHang  String?  @map("chi_tiet_dia_diem_xep_hang")
+  phuongTienVanChuyen    String?  @map("phuong_tien_van_chuyen")
+  ngayKhoiHanhVanChuyen  String?  @map("ngay_khoi_hanh_van_chuyen")
+  dichBaoThue            String?  @map("dich_bao_thue")
+  quaKhuVucGiamSat       String?  @map("qua_khu_vuc_giam_sat")
+  nguoiThucHien          String?  @map("nguoi_thuc_hien")
+  startDate              String?  @map("start_date")
+  endDate                String?  @map("end_date")
+  soCo                   String?  @map("so_co")
+  poNo                   String?  @map("po_no")
+  ghiChu2                String?  @map("ghi_chu_2")
+  ghiChu3                String?  @map("ghi_chu_3")
+  shmtDate               String?  @map("shmt_date")
+  domain                 String?
+  arNumber               String?  @map("ar_number")
+  extraData              String?  @map("extra_data")
+  gsheetId               String   @map("gsheet_id")
+  folderId               String?  @map("folder_id")
+  createdDate            DateTime @default(now()) @map("created_date")
+  ccgh                   String[] @default([])
+
+  @@map("invoker_followup")
+}
+
+model CargoList {
+  id                         String    @id @default(uuid())
+  followUpId                 String    @map("follow_up_id")
+  customCode                 String?   @map("custom_code")
+  hsCode                     String?   @map("hs_code")
+  qty                        Float?
+  unitPrice                  Float?    @map("unit_price")
+  qty2                       Float?    @map("qty_2")
+  unit2                      String?   @map("unit_2")
+  vietnameseName             String?   @map("vietnamese_name")
+  importer                   String?
+  packageQty                 Float?    @map("package_qty")
+  packageType                String?   @map("package_type")
+  grossWeight                Float?    @map("gross_weight")
+  invoiceNo                  String?   @map("invoice_no")
+  invoiceDate                DateTime? @map("invoice_date")
+  term                       String?
+  createdAt                  DateTime  @default(now()) @map("created_at")
+  updatedAt                  DateTime  @updatedAt @map("updated_at")
+  importTaxCode              String?   @map("import_tax_code")
+  totalPrice                 Float?    @map("total_price")
+  unit                       String?
+  vatTaxCode                 String?   @map("vat_tax_code")
+  originalCountry            String?   @map("original_country")
+  originalCargoName          String?   @map("original_cargo_name")
+  dutyReductionCode          String?   @map("duty_reduction_code")
+  imExDutyExemptionCode      String?   @map("im_ex_duty_exemption_code")
+  imExDutyExemptionAmount    Float?    @map("im_ex_duty_exemption_amount")
+  imExDutyExemptionCondition String?   @map("im_ex_duty_exemption_condition")
+  importTaxAmount            Float?    @map("import_tax_amount")
+  importTaxRate              Float?    @map("import_tax_rate")
+  vatTaxAmount               Float?    @map("vat_tax_amount")
+  vatTaxRate                 Float?    @map("vat_tax_rate")
+  /// Trị giá tính thuế (dòng) — ECUS Danh sách hàng
+  lineTaxableValue           Float?    @map("line_taxable_value")
+  /// TS XK (%) — thuế suất xuất khẩu theo dòng
+  exportTaxRatePercent       Float?    @map("export_tax_rate_percent")
+  /// Tiền thuế XK
+  exportTaxAmount            Float?    @map("export_tax_amount")
+  /// Đơn giá tính thuế
+  taxableUnitPrice           Float?    @map("taxable_unit_price")
+  followUp                   FollowUp  @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+
+  @@index([followUpId])
+  @@map("cargo_list")
+}
+
+model ContactInquiry {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("contact_inquiry")
+}
+
+model CompanyColor {
+  id        String   @id @default(uuid())
+  taxCode   String   @map("tax_code")
+  color     String
+  domain    Site     @default(SGN)
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([taxCode, domain])
+  @@map("company_color")
+}
+
+model PartnersMasterData {
+  id                       String            @id @default(uuid())
+  taxCode                  String?           @map("tax_code")
+  cccd                     String?
+  ddInfo                   String?           @map("dd_info")
+  site                     Site              @default(SGN)
+  createdBy                String            @map("created_by")
+  createdAt                DateTime          @default(now()) @map("created_at")
+  updatedAt                DateTime          @updatedAt @map("updated_at")
+  enableKVGS               Boolean           @default(true) @map("enable_kvgs")
+  enableCDS                Boolean           @default(true) @map("enable_cds")
+  warehouse                String?
+  defaultWarehouseConfigId String?           @map("default_warehouse_config_id")
+  fullName                 String?           @map("full_name")
+  invoiceData              String?           @map("invoice_data")
+  invoiceCompanyName       String?           @map("invoice_company_name")
+  invoiceAddress           String?           @map("invoice_address")
+  invoicePostalCode        String?           @map("invoice_postal_code")
+  invoicePhone             String?           @map("invoice_phone")
+  ewmsPass                 String?           @map("ewms_pass")
+  maHQ                     String?           @map("ma_hq")
+  vatType                  String?           @map("vat_type")
+  creditOnlyFeeCodes       String[]          @default([]) @map("credit_only_fee_codes")
+  user                     User              @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  warehouseConfigs         WarehouseConfig[]
+  defaultWarehouseConfig   WarehouseConfig?  @relation("PartnerDefaultWarehouse", fields: [defaultWarehouseConfigId], references: [id], onDelete: SetNull)
+
+  @@index([defaultWarehouseConfigId])
+  @@index([taxCode])
+  @@index([taxCode, site])
+  @@index([site])
+  @@map("partners_master_data")
+}
+
+model WarehouseConfig {
+  id                   String               @id @default(uuid())
+  partnersMasterDataId String               @map("partners_master_data_id")
+  warehouseName        String               @map("warehouse_name")
+  deliveryAddress      String?              @map("delivery_address")
+  contactInfo          String?              @map("contact_info")
+  invoiceInfo          String?              @map("invoice_info")
+  notes                String?
+  createdBy            String               @map("created_by")
+  createdAt            DateTime             @default(now()) @map("created_at")
+  updatedAt            DateTime             @updatedAt @map("updated_at")
+  mapPosition          String?              @map("map_position")
+  user                 User                 @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  partner              PartnersMasterData   @relation(fields: [partnersMasterDataId], references: [id], onDelete: Cascade)
+  defaultForPartners   PartnersMasterData[] @relation("PartnerDefaultWarehouse")
+
+  @@index([partnersMasterDataId])
+  @@map("warehouse_config")
+}
+
+model TruckingNumber {
+  id            String   @id @default(uuid())
+  plateNumber   String   @map("plate_number")
+  driverName    String?  @map("driver_name")
+  vehicleType   String?  @map("vehicle_type")
+  site          Site     @default(SGN)
+  createdBy     String   @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  payload       Float?   @map("payload")
+  isVendor      Boolean  @default(false) @map("is_vendor")
+  vendorName    String?  @map("vendor_name")
+  driverEmail   String?  @map("driver_email")
+  driverCCCD    String?  @map("driver_cccd")
+  driverLicense String?  @map("driver_license")
+  driverPhone   String?  @map("driver_phone")
+  fcrs          FCR[]
+  user          User     @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([plateNumber])
+  @@index([site])
+  @@index([vendorName, site])
+  @@map("trucking_numbers")
+}
+
+model Tracking {
+  id             String    @id @default(uuid())
+  deliveryNumber String?   @map("delivery_number")
+  image          String?   @map("image")
+  time           DateTime? @map("time")
+  location       String?   @map("location")
+  file           String?   @map("file")
+  userMail       String?   @map("user_mail")
+  userName       String?   @map("user_name")
+  userTel        String?   @map("user_tel")
+  note           String?   @map("note")
+  status         String?   @map("status")
+  description    String?   @map("description")
+  customerName   String?   @map("customer_name")
+  from           String?   @map("from")
+  to             String?   @map("to")
+  dateSend       DateTime? @map("date_send")
+  totalBox       Float?    @map("total_box")
+  weight         Float?    @map("weight")
+  address        String?   @map("address")
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+  createdBy      String?   @map("created_by")
+
+  @@index([deliveryNumber])
+  @@map("tracking")
+}
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  name        String
+  key         String    @unique
+  keyPrefix   String    @map("key_prefix")
+  userId      String    @map("user_id")
+  site        Site
+  permissions String[]  @default(["create-transaction"])
+  isActive    Boolean   @default(true)
+  expiresAt   DateTime? @map("expires_at")
+  lastUsedAt  DateTime? @map("last_used_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([key])
+  @@index([userId])
+  @@map("api_key")
+}
+
+model ApiCallLog {
+  id             String   @id @default(uuid())
+  endpoint       String
+  method         String
+  statusCode     Int      @map("status_code")
+  responseTimeMs Int      @map("response_time_ms")
+  apiKeyId       String?  @map("api_key_id")
+  apiKeyName     String?  @map("api_key_name")
+  userId         String?  @map("user_id")
+  userName       String?  @map("user_name")
+  site           String?
+  requestBody    Json?    @map("request_body")
+  requestParams  Json?    @map("request_params")
+  responseBody   Json?    @map("response_body")
+  ipAddress      String?  @map("ip_address")
+  userAgent      String?  @map("user_agent")
+  errorMessage   String?  @map("error_message")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([endpoint])
+  @@index([apiKeyId])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([statusCode])
+  @@map("api_call_log")
+}
+
+model PaymentRequest {
+  id                 String            @id @default(uuid())
+  declarationNumber  String?           @map("declaration_number")
+  taxCode            String?           @map("tax_code")
+  amount             Float?
+  authority          String?
+  type               String?
+  arNumber           String?           @map("ar_number")
+  notifyNumber       String?           @map("notify_number")
+  followUpId         String?           @map("follow_up_id")
+  truckingFollowUpId String?           @map("trucking_follow_up_id")
+  createdBy          String            @map("created_by")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  domain             Site?
+  id_vendor_cost     String?
+  user               User              @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  followUp           FollowUp?         @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+  vendor_cost        VendorCost?       @relation(fields: [id_vendor_cost], references: [id])
+  truckingFollowUp   TruckingFollowUp? @relation(fields: [truckingFollowUpId], references: [id], onDelete: Cascade)
+
+  @@index([followUpId])
+  @@index([truckingFollowUpId])
+  @@index([createdBy])
+  @@index([taxCode])
+  @@index([id_vendor_cost])
+  @@map("payment_request")
+}
+
+model TruckingActivityLog {
+  id                 String           @id @default(uuid())
+  truckingFollowUpId String           @map("trucking_follow_up_id")
+  userId             String?          @map("user_id")
+  userName           String?          @map("user_name")
+  action             String
+  subResource        String?          @map("sub_resource")
+  subResourceId      String?          @map("sub_resource_id")
+  field              String?
+  oldValue           Json?            @map("old_value")
+  newValue           Json?            @map("new_value")
+  createdAt          DateTime         @default(now()) @map("created_at")
+  truckingFollowUp   TruckingFollowUp @relation(fields: [truckingFollowUpId], references: [id], onDelete: Cascade)
+
+  @@index([truckingFollowUpId, createdAt(sort: Desc)])
+  @@map("trucking_activity_log")
+}
+
+model FollowUpActivityLog {
+  id            String   @id @default(uuid())
+  followUpId    String   @map("follow_up_id")
+  userId        String?  @map("user_id")
+  userName      String?  @map("user_name")
+  action        String
+  subResource   String?  @map("sub_resource")
+  subResourceId String?  @map("sub_resource_id")
+  field         String?
+  oldValue      Json?    @map("old_value")
+  newValue      Json?    @map("new_value")
+  createdAt     DateTime @default(now()) @map("created_at")
+  followUp      FollowUp @relation(fields: [followUpId], references: [id], onDelete: Cascade)
+
+  @@index([followUpId, createdAt(sort: Desc)])
+  @@map("follow_up_activity_log")
+}
+
+model GeminiHistory {
+  id               String   @id @default(uuid())
+  jobNumber        String?  @map("job_number")
+  userId           String?  @map("user_id")
+  userName         String?  @map("user_name")
+  model            String?
+  prompt           String?
+  response         String?
+  status           Int?
+  fileIds          String[] @map("file_ids")
+  fileNames        String[] @map("file_names")
+  totalFileSizeMb  Float?   @map("total_file_size_mb")
+  requestBody      Json?    @map("request_body")
+  promptTokens     Int?     @map("prompt_tokens")
+  candidatesTokens Int?     @map("candidates_tokens")
+  totalTokens      Int?     @map("total_tokens")
+  durationMs       Int?     @map("duration_ms")
+  createdAt        DateTime @default(now()) @map("created_at")
+  errorMessage     String?  @map("error_message")
+  operationType    String?  @map("operation_type")
+  taxCode          String?  @map("tax_code")
+  userCustomPrompt String?  @map("user_custom_prompt")
+  serviceMode      String?  @map("service_mode")
+  goal             String?
+  sessionId        String?  @map("session_id")
+
+  @@index([jobNumber])
+  @@index([userId])
+  @@index([userId, goal])
+  @@index([userId, taxCode, operationType, serviceMode])
+  @@index([createdAt(sort: Desc)])
+  @@map("gemini_history")
+}
+
+model ShippingLine {
+  id            String         @id @default(uuid())
+  name          String
+  operationType OperationType? @map("operation_type")
+  site          Site           @default(SGN)
+  createdBy     String         @map("created_by")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
+  notes         String?
+  user          User           @relation("ShippingLineCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([name])
+  @@index([site])
+  @@map("shipping_lines")
+}
+
+model Vendor {
+  id             String               @id @default(uuid())
+  name           String
+  site           Site                 @default(SGN)
+  createdBy      String               @map("created_by")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+  emails         String[]             @default([]) @map("emails")
+  vendorCosts    VendorCost[]
+  vendorFeeTypes VendorFeeType[]
+  portalAccount  VendorPortalAccount?
+  user           User                 @relation("VendorCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([name, site])
+  @@index([name])
+  @@index([site])
+  @@map("vendors")
+}
+
+model Ops {
+  id        String   @id @default(uuid())
+  name      String
+  site      Site     @default(SGN)
+  emails    String[] @default([]) @map("emails")
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  autoMail  Boolean  @default(false) @map("auto_mail")
+  user      User     @relation("OpsCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([name, site])
+  @@index([name])
+  @@index([site])
+  @@map("ops")
+}
+
+model VendorPortalAccount {
+  id           String   @id @default(uuid())
+  vendorId     String   @unique @map("vendor_id")
+  username     String   @unique
+  passwordHash String   @map("password_hash")
+  site         Site     @default(SGN)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  vendor       Vendor   @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+
+  @@index([site, isActive])
+  @@map("vendor_portal_account")
+}
+
+model VendorFeeType {
+  id             String        @id @default(uuid())
+  vendorId       String?       @map("vendor_id")
+  site           Site          @default(SGN)
+  name           String
+  isActive       Boolean       @default(true) @map("is_active")
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  feeCode        String?       @map("fee_code")
+  mode           VendorFeeMode @default(ALL)
+  feeDescription String?       @map("fee_description")
+  isNotDefault   Boolean       @default(false) @map("is_not_default")
+  costs          VendorCost[]
+  vendor         Vendor?       @relation(fields: [vendorId], references: [id])
+
+  @@index([site])
+  @@index([feeCode])
+  @@index([vendorId])
+  @@index([isNotDefault])
+  @@map("vendor_fee_type")
+}
+
+model VendorCost {
+  id                 String              @id @default(uuid())
+  truckingFollowUpId String              @map("trucking_follow_up_id")
+  fcrId              String              @map("fcr_id")
+  vendorId           String?             @map("vendor_id")
+  feeTypeId          String?             @map("fee_type_id")
+  feeName            String              @map("fee_name")
+  vatPercent         Float?              @map("vat_percent")
+  totalVat           Float?              @map("total_vat")
+  totalFee           Float?              @map("total_fee")
+  invoiceLink        String?             @map("invoice_link")
+  trackingCode       String?             @map("tracking_code")
+  note               String?
+  rowOrder           Int                 @default(1) @map("row_order")
+  entryMode          VendorCostEntryMode @default(MANUAL) @map("entry_mode")
+  createdByVendor    String?             @map("created_by_vendor")
+  createdAt          DateTime            @default(now()) @map("created_at")
+  updatedAt          DateTime            @updatedAt @map("updated_at")
+  isDisbursement     Boolean             @default(false) @map("is_disbursement")
+  invoiceNumber      String?             @map("invoice_number")
+  sellerTaxCode      String?             @map("seller_tax_code")
+  status             VendorCostStatus    @default(PENDING) @map("status")
+  rejectionReason    String?             @map("rejection_reason")
+  reviewedById       String?             @map("reviewed_by_id")
+  reviewedAt         DateTime?           @map("reviewed_at")
+  invoiceSentDate    String?             @map("invoice_sent_date")
+  reviewMessage      String?             @map("review_message")
+  isSelling          Boolean             @default(false) @map("is_selling")
+  payment_request    PaymentRequest[]
+  fcr                FCR                 @relation(fields: [fcrId], references: [id], onDelete: Cascade)
+  feeType            VendorFeeType?      @relation(fields: [feeTypeId], references: [id])
+  reviewer           User?               @relation("VendorCostReviewer", fields: [reviewedById], references: [id])
+  truckingFollowUp   TruckingFollowUp    @relation(fields: [truckingFollowUpId], references: [id], onDelete: Cascade)
+  vendor             Vendor?             @relation(fields: [vendorId], references: [id])
+  erpLogs            VendorCostErpLog[]
+
+  @@index([truckingFollowUpId])
+  @@index([fcrId])
+  @@index([vendorId])
+  @@index([feeTypeId])
+  @@index([createdAt])
+  @@index([status])
+  @@index([reviewedById])
+  @@index([fcrId, status])
+  @@map("vendor_cost")
+}
+
+model VendorCostErpLog {
+  id           String     @id @default(uuid())
+  vendorCostId String     @map("vendor_cost_id")
+  caseNumber   Int        @map("case_number")
+  erpPayload   Json       @map("erp_payload")
+  arPayload    Json?      @map("ar_payload")
+  createdAt    DateTime   @default(now()) @map("created_at")
+  vendorCost   VendorCost @relation(fields: [vendorCostId], references: [id], onDelete: Cascade)
+
+  @@index([vendorCostId])
+  @@map("vendor_cost_erp_log")
+}
+
+model ForeignPort {
+  id           String    @id @default(uuid())
+  name         String
+  portType     PortType? @map("port_type")
+  site         Site      @default(SGN)
+  createdBy    String    @map("created_by")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  domesticPort String?   @map("domestic_port")
+  user         User      @relation("ForeignPortCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([name, site, domesticPort])
+  @@index([name])
+  @@index([site])
+  @@index([portType])
+  @@index([domesticPort])
+  @@map("foreign_ports")
+}
+
+model PickOrLiftPlace {
+  id        String   @id @default(uuid())
+  name      String
+  site      Site     @default(SGN)
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation("PickOrLiftPlaceCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([name, site])
+  @@index([name])
+  @@index([site])
+  @@map("pick_or_lift_places")
+}
+
+model ContainerSizeConfig {
+  id            String   @id @default(uuid())
+  containerSize String   @map("container_size")
+  isoType       String?  @map("iso_type")
+  kc            String?  @map("kc")
+  port          String?  @map("port")
+  site          Site     @default(SGN)
+  createdBy     String   @map("created_by")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+  user          User     @relation("ContainerSizeConfigCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([isoType, port])
+  @@index([site])
+  @@index([containerSize])
+  @@map("container_size_configs")
+}
+
+model FieldOption {
+  id         String   @id @default(uuid())
+  fieldName  String   @map("field_name")
+  code       String?  @map("code")
+  name       String   @map("name")
+  color      String?  @map("color")
+  order      Int      @default(0) @map("order")
+  site       Site?    @map("site")
+  isActive   Boolean  @default(true) @map("is_active")
+  createdBy  String   @map("created_by")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  conditions Json?    @map("conditions")
+  user       User     @relation("FieldOptionCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([fieldName, code, site])
+  @@index([fieldName])
+  @@index([fieldName, site])
+  @@index([isActive])
+  @@map("field_options")
+}
+
+model CustomsWarehouse {
+  id        String   @id @default(uuid())
+  whCode    String   @map("wh_code")
+  whName    String   @map("wh_name")
+  site      Site     @default(SGN)
+  createdBy String   @map("created_by")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  user      User     @relation("CustomsWarehouseCreator", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([whCode, site])
+  @@index([whCode])
+  @@index([site])
+  @@map("customs_warehouses")
+}
+
+model FreightDoc {
+  id        String   @id @default(uuid())
+  jobNumber String?  @map("job_number")
+  mabl      String?  @map("mabl")
+  habl      String?  @map("habl")
+  type      String?
+  driveUrl  String?  @map("drive_url")
+  version   Int?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  folderId  String?  @map("folder_id")
+
+  @@unique([habl, type, version])
+  @@map("freight_doc")
+}
+
+model logistics_carrier {
+  id             String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  email          String?
+  operation_type OperationType?
+  notes          String?
+  site           Site           @default(SGN)
+  created_by     String
+  created_at     DateTime       @default(now()) @db.Timestamptz(6)
+  updated_at     DateTime       @default(now()) @db.Timestamptz(6)
+
+  @@index([name])
+  @@index([site])
+}
+
+enum CdsStatus {
+  DRAFT
+  REGISTERED
+}
+
+enum UserRole {
+  CUSTOMER
+  STAFF
+  MANAGER
+  ADMIN
+  SUPERADMIN
+}
+
+enum Site {
+  SGN
+  DAD
+  HAN
+}
+
+enum OperationType {
+  XUAT
+  NHAP
+}
+
+enum VendorCostEntryMode {
+  MANUAL
+  EXCEL_IMPORT
+}
+
+enum VendorCostStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum VendorFeeMode {
+  ALL
+  FCL
+  LCL
+}
+
+enum PortType {
+  DESTINATION
+  TRANSIT
+  DOMESTIC
+}
