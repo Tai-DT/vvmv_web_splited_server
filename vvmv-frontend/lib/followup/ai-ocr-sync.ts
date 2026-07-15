@@ -211,9 +211,11 @@ function normalizeTransportVehicleValue(value: unknown) {
 	return stripCdsLookupDisplayLabel(normalized);
 }
 
-function isSeaTransportVehicleCode(value: unknown) {
+function isLikelyTransportVehicleCode(value: unknown) {
 	const text = normalizeString(value);
-	return Boolean(text && /^\d{4}$/.test(text));
+	return Boolean(
+		text && /^[A-Z0-9][A-Z0-9\-/_.]{1,19}$/i.test(text) && /\d/.test(text),
+	);
 }
 
 function postProcessSanitizedCdsInfoPayload(output: SanitizedCdsInfoPayload) {
@@ -237,7 +239,7 @@ function postProcessSanitizedCdsInfoPayload(output: SanitizedCdsInfoPayload) {
 		output.transportVehicleCode,
 	);
 	if (transportVehicleCode) {
-		if (isSeaTransportVehicleCode(transportVehicleCode)) {
+		if (isLikelyTransportVehicleCode(transportVehicleCode)) {
 			output.transportVehicleCode = transportVehicleCode;
 		} else {
 			if (!normalizeString(output.transportVehicleName)) {
