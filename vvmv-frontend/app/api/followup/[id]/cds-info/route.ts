@@ -18,6 +18,12 @@ import {
 	sanitizeCdsInfoPayload,
 } from "@/lib/followup/cds-info-sanitize";
 import { CDS_DRAFT_LIFECYCLE_RESET } from "@/lib/followup/cds-lifecycle";
+import {
+	buildCdsCollectionWrites,
+	CDS_INFO_COLLECTION_INCLUDE,
+	hydrateCdsCollections,
+	toPrismaCdsScalarPayload,
+} from "@/lib/followup/cds-normalized-collections";
 import { checkFollowUpPermission } from "@/lib/followup/check-permission";
 import {
 	getHanConnectionPublicInfo,
@@ -398,177 +404,6 @@ function getCrossOperationReferenceConfig(
 	return null;
 }
 
-function toPrismaCdsInfoPayload(payload: CdsPayload): CdsPayload {
-	return Object.fromEntries(
-		Object.entries(payload)
-			.filter(([key]) => !CDS_INFO_JSON_FIELD_NAMES.has(key))
-			.map(([key, value]) => [key, value]),
-	);
-}
-
-function withNormalizedCdsCollections(cdsInfo: unknown): CdsPayload {
-	if (!cdsInfo || typeof cdsInfo !== "object") {
-		return {};
-	}
-
-	const row = cdsInfo as CdsPayload & {
-		billItemRows?: unknown[];
-		valuationAdjustmentRows?: unknown[];
-		transportScheduleRows?: unknown[];
-		importLicenseRows?: unknown[];
-		otherLegalDocumentRows?: unknown[];
-		electronicAttachmentRows?: unknown[];
-	};
-
-	return {
-		...row,
-		billItems: Array.isArray(row.billItemRows)
-			? row.billItemRows.map((item) => {
-					const entry = item as CdsPayload;
-					return {
-						billNumber: entry.billNumber ?? null,
-						billDate: entry.billDate ?? null,
-						hawbNumber: entry.hawbNumber ?? null,
-						mawbYear: entry.mawbYear ?? null,
-					};
-				})
-			: row.billItems,
-		valuationAdjustments: Array.isArray(row.valuationAdjustmentRows)
-			? row.valuationAdjustmentRows.map((item) => {
-					const entry = item as CdsPayload;
-					return {
-						nameCode: entry.nameCode ?? null,
-						classificationCode: entry.classificationCode ?? null,
-						currencyCode: entry.currencyCode ?? null,
-						adjustmentValue: entry.adjustmentValue ?? null,
-						allocationRatio: entry.allocationRatio ?? null,
-					};
-				})
-			: row.valuationAdjustments,
-		transportSchedules: Array.isArray(row.transportScheduleRows)
-			? row.transportScheduleRows.map((item) => {
-					const entry = item as CdsPayload;
-					return {
-						locationCode: entry.locationCode ?? null,
-						locationName: entry.locationName ?? null,
-						arrivalDate: entry.arrivalDate ?? null,
-						departureDate: entry.departureDate ?? null,
-					};
-				})
-			: row.transportSchedules,
-		importLicenses: Array.isArray(row.importLicenseRows)
-			? row.importLicenseRows.map(
-					(item) => (item as CdsPayload).licenseNumber ?? null,
-				)
-			: row.importLicenses,
-		otherLegalDocumentCodes: Array.isArray(row.otherLegalDocumentRows)
-			? row.otherLegalDocumentRows.map(
-					(item) => (item as CdsPayload).documentCode ?? null,
-				)
-			: row.otherLegalDocumentCodes,
-		electronicAttachments: Array.isArray(row.electronicAttachmentRows)
-			? row.electronicAttachmentRows.map((item) => {
-					const entry = item as CdsPayload;
-					return {
-						attachmentNumber: entry.attachmentNumber ?? null,
-						attachmentDescription: entry.attachmentDescription ?? null,
-					};
-				})
-			: row.electronicAttachments,
-	};
-}
-
-function buildCdsCollectionWrites(payload: CdsPayload) {
-	const rows = (key: string) =>
-		Array.isArray(payload[key]) ? payload[key] : [];
-
-	return {
-		billItemRows: {
-			deleteMany: {},
-			create: rows("billItems").map((item, index) => {
-				const entry = item as CdsPayload;
-				return {
-					sortOrder: index,
-					billNumber: (entry.billNumber as string | null | undefined) ?? null,
-					billDate: (entry.billDate as string | null | undefined) ?? null,
-					hawbNumber: (entry.hawbNumber as string | null | undefined) ?? null,
-					mawbYear: (entry.mawbYear as string | null | undefined) ?? null,
-				};
-			}),
-		},
-		valuationAdjustmentRows: {
-			deleteMany: {},
-			create: rows("valuationAdjustments").map((item, index) => {
-				const entry = item as CdsPayload;
-				return {
-					sortOrder: index,
-					nameCode: (entry.nameCode as string | null | undefined) ?? null,
-					classificationCode:
-						(entry.classificationCode as string | null | undefined) ?? null,
-					currencyCode:
-						(entry.currencyCode as string | null | undefined) ?? null,
-					adjustmentValue:
-						(entry.adjustmentValue as number | null | undefined) ?? null,
-					allocationRatio:
-						(entry.allocationRatio as number | null | undefined) ?? null,
-				};
-			}),
-		},
-		transportScheduleRows: {
-			deleteMany: {},
-			create: rows("transportSchedules").map((item, index) => {
-				const entry = item as CdsPayload;
-				return {
-					sortOrder: index,
-					locationCode:
-						(entry.locationCode as string | null | undefined) ?? null,
-					locationName:
-						(entry.locationName as string | null | undefined) ?? null,
-					arrivalDate: (entry.arrivalDate as string | null | undefined) ?? null,
-					departureDate:
-						(entry.departureDate as string | null | undefined) ?? null,
-				};
-			}),
-		},
-		importLicenseRows: {
-			deleteMany: {},
-			create: rows("importLicenses").map((value, index) => ({
-				sortOrder: index,
-				licenseNumber: (value as string | null | undefined) ?? null,
-			})),
-		},
-		otherLegalDocumentRows: {
-			deleteMany: {},
-			create: rows("otherLegalDocumentCodes").map((value, index) => ({
-				sortOrder: index,
-				documentCode: (value as string | null | undefined) ?? null,
-			})),
-		},
-		electronicAttachmentRows: {
-			deleteMany: {},
-			create: rows("electronicAttachments").map((item, index) => {
-				const entry = item as CdsPayload;
-				return {
-					sortOrder: index,
-					attachmentNumber:
-						(entry.attachmentNumber as string | null | undefined) ?? null,
-					attachmentDescription:
-						(entry.attachmentDescription as string | null | undefined) ?? null,
-				};
-			}),
-		},
-	};
-}
-
-const CDS_INFO_COLLECTION_INCLUDE = {
-	billItemRows: { orderBy: { sortOrder: "asc" as const } },
-	valuationAdjustmentRows: { orderBy: { sortOrder: "asc" as const } },
-	transportScheduleRows: { orderBy: { sortOrder: "asc" as const } },
-	importLicenseRows: { orderBy: { sortOrder: "asc" as const } },
-	otherLegalDocumentRows: { orderBy: { sortOrder: "asc" as const } },
-	electronicAttachmentRows: { orderBy: { sortOrder: "asc" as const } },
-} as const;
-
 const CDS_NON_DATA_CHANGE_FIELDS = new Set([
 	"id",
 	"followUpId",
@@ -627,6 +462,10 @@ function hasCdsDataChanges(
 	return Object.entries(sanitized).some(([field, newValue]) => {
 		if (CDS_NON_DATA_CHANGE_FIELDS.has(field)) {
 			return false;
+		}
+
+		if (CDS_INFO_JSON_FIELD_NAMES.has(field)) {
+			return !cdsValuesEqual(existingRecord[field] ?? [], newValue ?? []);
 		}
 
 		return !cdsValuesEqual(existingRecord[field] ?? null, newValue ?? null);
@@ -799,7 +638,7 @@ export async function GET(
 			return NextResponse.json({ data: {} });
 		}
 
-		const cdsInfo = withNormalizedCdsCollections(
+		const cdsInfo = hydrateCdsCollections(
 			followUp.cdsInfo,
 		) as Partial<FollowUpCdsInfoRow>;
 		const companySource = {
@@ -1043,8 +882,11 @@ export async function POST(
 
 		const existing = await prismaRPA.followUpCdsInfo.findUnique({
 			where: { followUpId: id },
+			include: CDS_INFO_COLLECTION_INCLUDE,
 		});
-		const existingRecord = existing as Record<string, unknown> | null;
+		const existingRecord = existing
+			? (hydrateCdsCollections(existing) as Record<string, unknown>)
+			: null;
 		const hasDataChanges = hasCdsDataChanges(existingRecord, sanitized);
 
 		if (
@@ -1117,14 +959,23 @@ export async function POST(
 		}
 
 		const shouldResetLifecycle = !preserveLifecycle && hasDataChanges;
-		const persistableData = toPrismaCdsInfoPayload(sanitized);
+		const persistableData = toPrismaCdsScalarPayload(sanitized);
+		const collectionWrites = buildCdsCollectionWrites(sanitized);
+		const collectionCreates = Object.fromEntries(
+			Object.entries(collectionWrites).map(([relation, write]) => [
+				relation,
+				{ create: write.create },
+			]),
+		);
 		const createData = {
 			followUpId: id,
 			...persistableData,
+			...collectionCreates,
 			...(shouldResetLifecycle ? CDS_DRAFT_LIFECYCLE_RESET : {}),
 		} as Prisma.FollowUpCdsInfoUncheckedCreateInput;
 		const updateData = {
 			...persistableData,
+			...collectionWrites,
 			...(shouldResetLifecycle ? CDS_DRAFT_LIFECYCLE_RESET : {}),
 		} as Prisma.FollowUpCdsInfoUncheckedUpdateInput;
 
@@ -1132,6 +983,7 @@ export async function POST(
 			where: { followUpId: id },
 			create: createData,
 			update: updateData,
+			include: CDS_INFO_COLLECTION_INCLUDE,
 		});
 
 		const followUpUpdateData: Record<string, unknown> = {};
@@ -1232,7 +1084,10 @@ export async function POST(
 
 			const oldVal = existingRecord?.[field] ?? null;
 			const nextVal = newVal ?? null;
-			if (String(oldVal) !== String(nextVal)) {
+			const changed = CDS_INFO_JSON_FIELD_NAMES.has(field)
+				? !cdsValuesEqual(oldVal ?? [], nextVal ?? [])
+				: String(oldVal) !== String(nextVal);
+			if (changed) {
 				logFollowUpActivity(id, {
 					userId: session.user.id,
 					userName: session.user.name,
@@ -1245,7 +1100,10 @@ export async function POST(
 			}
 		});
 
-		return NextResponse.json({ success: true, data: saved });
+		return NextResponse.json({
+			success: true,
+			data: hydrateCdsCollections(saved),
+		});
 	} catch (error) {
 		console.error("Error saving CDS info:", error);
 		return NextResponse.json(

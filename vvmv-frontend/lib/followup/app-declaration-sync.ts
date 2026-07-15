@@ -9,6 +9,7 @@ import {
 import {
 	buildCdsCollectionWrites,
 	CDS_INFO_COLLECTION_INCLUDE,
+	hydrateCdsCollections,
 	toPrismaCdsScalarPayload,
 } from "@/lib/followup/cds-normalized-collections";
 import type { Prisma } from "@/prisma/client";
@@ -141,6 +142,7 @@ export async function syncFollowUpDeclarationFromApp(followUpId: string) {
 	const saved = await prismaRPA.followUpCdsInfo.update({
 		where: { followUpId },
 		data: cdsUpdateData,
+		include: CDS_INFO_COLLECTION_INCLUDE,
 	});
 
 	await prismaRPA.cargoList.deleteMany({ where: { followUpId } });
@@ -151,7 +153,7 @@ export async function syncFollowUpDeclarationFromApp(followUpId: string) {
 	}
 
 	return {
-		saved,
+		saved: hydrateCdsCollections(saved),
 		cargoList,
 		declaration,
 		sourceInfo,
