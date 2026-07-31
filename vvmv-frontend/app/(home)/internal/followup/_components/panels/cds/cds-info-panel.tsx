@@ -603,6 +603,12 @@ export function CdsInfoPanel({
 	);
 
 	useEffect(() => {
+		// Never self-heal a locked declaration: the app's stored value must be
+		// displayed as-is even when it is missing from the current option list.
+		if (isAppIssuedDeclaration) {
+			return;
+		}
+
 		const currentPackageType = String(data.packageType ?? "").trim();
 		if (!currentPackageType) {
 			return;
@@ -631,6 +637,7 @@ export function CdsInfoPanel({
 	}, [
 		data.packageType,
 		getLookupOptionsForField,
+		isAppIssuedDeclaration,
 		preserveActiveTabScroll,
 		setData,
 	]);

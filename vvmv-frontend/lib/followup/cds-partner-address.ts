@@ -1,7 +1,7 @@
 import type { FollowUpCdsInfoRow } from "@/app/(home)/internal/followup/types";
 
-/** Giới hạn ký tự mỗi ô địa chỉ đối tác trên web — khớp ECUS/VNACCS (thường 35 ký tự/ô). */
-export const CDS_PARTNER_ADDRESS_LINE_MAX_LENGTH = 35;
+/** Giới hạn ký tự mỗi ô địa chỉ đối tác trên web — khớp ECUS/VNACCS (50 ký tự/ô). */
+export const CDS_PARTNER_ADDRESS_LINE_MAX_LENGTH = 50;
 export const CDS_PARTNER_ADDRESS_LINE_COUNT = 4;
 
 export const CDS_PARTNER_ADDRESS_FIELD_KEYS = [

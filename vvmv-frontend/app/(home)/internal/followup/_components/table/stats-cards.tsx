@@ -46,7 +46,7 @@ export const StatsCards = ({
 				onClick={() => onFilterChange("all")}
 				className={`${cardBase} justify-center ${
 					currentFilter === "all"
-						? "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 ring-2 ring-blue-500/20 shadow-md"
+						? "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800 ring-2 ring-blue-500/20 shadow-md scale-[1.02]"
 						: "bg-white dark:bg-gray-900/40 border-slate-200 dark:border-slate-800 hover:shadow-md hover:scale-[1.01]"
 				}`}
 			>
@@ -76,7 +76,7 @@ export const StatsCards = ({
 				onClick={() => onFilterChange("active")}
 				className={`${cardBase} ${
 					isActiveGroup
-						? "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800 ring-2 ring-amber-500/20 shadow-md"
+						? "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800 ring-2 ring-amber-500/20 shadow-md scale-[1.02]"
 						: "bg-white dark:bg-gray-900/40 border-slate-200 dark:border-slate-800 hover:shadow-md hover:scale-[1.01]"
 				}`}
 			>
@@ -201,7 +201,7 @@ export const StatsCards = ({
 				onClick={() => onFilterChange("finished")}
 				className={`${cardBase} justify-center ${
 					currentFilter === "finished"
-						? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800 ring-2 ring-emerald-500/20 shadow-md"
+						? "bg-emerald-50 dark:bg-emerald-900/20 border-emerald-200 dark:border-emerald-800 ring-2 ring-emerald-500/20 shadow-md scale-[1.02]"
 						: "bg-white dark:bg-gray-900/40 border-slate-200 dark:border-slate-800 hover:shadow-md hover:scale-[1.01]"
 				}`}
 			>
@@ -231,7 +231,7 @@ export const StatsCards = ({
 				onClick={() => onFilterChange("done")}
 				className={`${cardBase} justify-center ${
 					currentFilter === "done"
-						? "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800 ring-2 ring-indigo-500/20 shadow-md"
+						? "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-800 ring-2 ring-indigo-500/20 shadow-md scale-[1.02]"
 						: "bg-white dark:bg-gray-900/40 border-slate-200 dark:border-slate-800 hover:shadow-md hover:scale-[1.01]"
 				}`}
 			>

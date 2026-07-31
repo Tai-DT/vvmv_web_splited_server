@@ -173,3 +173,14 @@ export function buildCdsCollectionWrites(payload: CdsCollectionPayload) {
 		| "electronicAttachmentRows"
 	>;
 }
+
+/**
+ * Nested creates only — the create branch of an upsert rejects `deleteMany`.
+ */
+export function buildCdsCollectionCreates(payload: CdsCollectionPayload) {
+	return Object.fromEntries(
+		Object.entries(buildCdsCollectionWrites(payload)).map(
+			([rowsField, write]) => [rowsField, { create: write.create }],
+		),
+	);
+}

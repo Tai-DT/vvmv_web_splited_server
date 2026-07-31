@@ -964,8 +964,9 @@ export function validateCdsForEcusExport(
 		});
 	}
 
+	// Required solely by operation code (covers both import E11/E15/E21/E31/E41
+	// and export E42/E52/E62/E82 codes).
 	if (
-		resolvedOperationType !== "XUAT" &&
 		isPersonOrganizationClassificationRequiredForOperationCode(
 			cdsInfo.operationCode,
 		)
@@ -1142,6 +1143,7 @@ export function validateCdsForEcusExport(
 
 	const hasGuaranteeInfo = hasAnyValue([
 		cdsInfo.guaranteeBankCode,
+		cdsInfo.guaranteeIssueYear,
 		cdsInfo.guaranteeDocumentSymbol,
 		cdsInfo.guaranteeDocumentNumber,
 	]);
@@ -1184,10 +1186,10 @@ export function validateCdsForEcusExport(
 	if (hasGuaranteeInfo) {
 		warnIfCompanionValueMissing({
 			issues,
-			path: "cdsInfo.creditLimitIssueYear",
+			path: "cdsInfo.guaranteeIssueYear",
 			label: "Năm phát hành bảo lãnh",
 			condition: true,
-			value: cdsInfo.creditLimitIssueYear,
+			value: cdsInfo.guaranteeIssueYear ?? cdsInfo.creditLimitIssueYear,
 			message:
 				"Thông tin bảo lãnh đang nhập dở. Cần đủ năm phát hành, ngân hàng bảo lãnh, ký hiệu và số chứng từ bảo lãnh.",
 		});

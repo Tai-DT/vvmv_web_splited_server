@@ -372,6 +372,7 @@ exports.Prisma.FollowUpCdsInfoScalarFieldEnum = {
   valuationSummaryReceiptNumber: 'valuationSummaryReceiptNumber',
   taxSubstituteBankCode: 'taxSubstituteBankCode',
   creditLimitIssueYear: 'creditLimitIssueYear',
+  guaranteeIssueYear: 'guaranteeIssueYear',
   guaranteeBankCode: 'guaranteeBankCode',
   creditLimitDocumentSymbol: 'creditLimitDocumentSymbol',
   creditLimitDocumentNumber: 'creditLimitDocumentNumber',

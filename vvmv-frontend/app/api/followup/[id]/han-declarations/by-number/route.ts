@@ -8,6 +8,7 @@ import {
 	sanitizeCdsInfoPayload,
 } from "@/lib/followup/cds-info-sanitize";
 import {
+	buildCdsCollectionCreates,
 	buildCdsCollectionWrites,
 	toPrismaCdsScalarPayload,
 } from "@/lib/followup/cds-normalized-collections";
@@ -246,7 +247,10 @@ export async function POST(
 						sanitizedCdsInfo,
 					) as Prisma.FollowUpCdsInfoCreateInput),
 					followUp: { connect: { id } },
-					...buildCdsCollectionWrites(sanitizedCdsInfo),
+					...buildCdsCollectionCreates(sanitizedCdsInfo),
+					// Sanitize drops app-issued declaration numbers; persist them
+					// explicitly since this flow reads the registered declaration.
+					declarationNumber: data.declarationNumber ?? declarationNumber,
 					cdsStatus: "REGISTERED",
 					ecusDeclarationId: data.declarationId,
 				},
@@ -255,6 +259,7 @@ export async function POST(
 						sanitizedCdsInfo,
 					) as Prisma.FollowUpCdsInfoUpdateInput),
 					...buildCdsCollectionWrites(sanitizedCdsInfo),
+					declarationNumber: data.declarationNumber ?? declarationNumber,
 					cdsStatus: "REGISTERED",
 					ecusDeclarationId: data.declarationId,
 				},

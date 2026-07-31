@@ -20,6 +20,7 @@ import type { FollowUpOperationType } from "@/lib/followup/operation-type";
 import type { FollowUpCdsInfoRow, FollowUpRow } from "../../../types";
 import { findEcusCountryOptionByText } from "../ecus-country-options";
 import { ECUS_PARTNER_DIRECTORY } from "../ecus-partner-directory";
+import { clearImportImage1DependentFields } from "./cds-field-locks";
 import { LOOKUP_PAIRED_NAME_FIELDS } from "./cds-lookup-dialog-meta";
 import type { SelectOption } from "./cds-lookup-types";
 import {
@@ -61,28 +62,6 @@ export interface UseCdsFormParams {
 	getLookupOptionsForField: (
 		fieldKey: keyof FollowUpCdsInfoRow,
 	) => SelectOption[];
-}
-
-function clearImportImage1DependentFields(
-	record: Record<string, unknown>,
-	triggerField: "importerCode" | "exporterCode" | "entrustedImporterCode",
-) {
-	if (triggerField === "importerCode") {
-		record.importExportUnitName = null;
-		record.importerPostalCode = null;
-		record.importExportBusinessAddress = null;
-		record.importerPhone = null;
-	} else if (triggerField === "entrustedImporterCode") {
-		record.entrustedImporterName = null;
-	} else if (triggerField === "exporterCode") {
-		record.partnerName = null;
-		record.exporterPostalCode = null;
-		record.partnerAddress1 = null;
-		record.partnerAddress2 = null;
-		record.partnerAddress3 = null;
-		record.partnerAddress4 = null;
-		record.exportCountryCode = null;
-	}
 }
 
 function normalizeComparableAutofillValue(value: unknown) {
