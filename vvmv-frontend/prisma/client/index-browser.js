@@ -323,6 +323,7 @@ exports.Prisma.FollowUpCdsInfoScalarFieldEnum = {
   releaseBeforePermitCode: 'releaseBeforePermitCode',
   taxPaymentDeadlineCode: 'taxPaymentDeadlineCode',
   taxDestinationLocation: 'taxDestinationLocation',
+  finalDestinationName: 'finalDestinationName',
   estimatedArrivalAtDestinationDate: 'estimatedArrivalAtDestinationDate',
   transportDepartureDate: 'transportDepartureDate',
   note: 'note',

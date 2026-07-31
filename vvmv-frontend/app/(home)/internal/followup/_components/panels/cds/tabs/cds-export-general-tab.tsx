@@ -37,6 +37,7 @@ export function CdsExportGeneralTab({
 	renderLookupCodeAndName,
 	renderLookupPickerButton,
 	renderInfoButton,
+	renderPrintCargoIdentificationButton,
 	renderExportSectionHeader,
 	getExportFieldLockOptions,
 	valuationAllocationRatioTotal,
@@ -548,14 +549,11 @@ export function CdsExportGeneralTab({
 											className: "h-[22px] w-[24px] px-0",
 										},
 									)}
-									{renderInfoButton(
-										"In định danh chưa được bật cho màn tờ khai xuất khẩu.",
-										{
-											ariaLabel: "In định danh vận đơn",
-											icon: <Printer aria-hidden="true" className="size-3.5" />,
-											className: "h-[22px] w-[24px] px-0",
-										},
-									)}
+									{renderPrintCargoIdentificationButton({
+										ariaLabel: "In định danh vận đơn",
+										icon: <Printer aria-hidden="true" className="size-3.5" />,
+										className: "h-[22px] w-[24px] px-0",
+									})}
 								</div>
 							</Row>
 

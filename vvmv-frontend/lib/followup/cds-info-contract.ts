@@ -115,6 +115,7 @@ export const PERSISTED_CDS_INFO_FIELDS = new Set([
 	"releaseBeforePermitCode",
 	"taxPaymentDeadlineCode",
 	"taxDestinationLocation",
+	"finalDestinationName",
 	"taxSubstituteBankCode",
 	"creditLimitIssueYear",
 	"guaranteeIssueYear",

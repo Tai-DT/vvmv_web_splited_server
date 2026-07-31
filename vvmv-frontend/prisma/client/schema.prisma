@@ -297,6 +297,7 @@ model FollowUpCdsInfo {
   releaseBeforePermitCode           String?                   @map("release_before_permit_code")
   taxPaymentDeadlineCode            String?                   @map("tax_payment_deadline_code")
   taxDestinationLocation            String?                   @map("tax_destination_location")
+  finalDestinationName              String?                   @map("final_destination_name")
   estimatedArrivalAtDestinationDate String?                   @map("estimated_arrival_at_destination_date")
   transportDepartureDate            String?                   @map("transport_departure_date")
   note                              String?

@@ -243,13 +243,16 @@ async function loadCdsDatabaseLookupsFromDb(): Promise<CdsDatabaseLookups | null
 					row.direction === "import" || row.direction === "export"
 						? row.direction
 						: "unknown",
+				// Rows stored with the schema default "snapshot" (or any unknown
+				// label) must keep the lowest merge priority, not masquerade as
+				// top-priority "vnaccs" data.
 				source:
 					row.source === "header" ||
 					row.source === "vnaccs" ||
 					row.source === "app" ||
 					row.source === "app_saved"
 						? row.source
-						: "vnaccs",
+						: "snapshot",
 			});
 			fieldOptions[field] = list;
 		}
@@ -641,7 +644,7 @@ function omitHardcodedFieldOptions(fieldOptions: AppFieldOptionMap) {
 }
 
 function getFieldOptionSourcePriority(
-	source: "header" | "vnaccs" | "app" | "app_saved",
+	source: "header" | "vnaccs" | "app" | "app_saved" | "snapshot",
 ) {
 	switch (source) {
 		case "header":
@@ -661,7 +664,7 @@ function mergeFieldOptionLists<
 		value: string;
 		direction: string;
 		count: number;
-		source: "header" | "vnaccs" | "app" | "app_saved";
+		source: "header" | "vnaccs" | "app" | "app_saved" | "snapshot";
 		label?: string | null;
 		address?: string | null;
 	},
@@ -877,6 +880,8 @@ function optionSourcePriority(source: DatabaseFieldOptionLookup["source"]) {
 			return 2;
 		case "app":
 			return 1;
+		case "snapshot":
+			return 0;
 	}
 
 	const unreachable: never = source;
@@ -1085,14 +1090,27 @@ async function loadSavedSubmissionLogs() {
 	});
 }
 
-async function loadSavedFieldOptions(
+/**
+ * Loads saved CDS rows + submission logs once and converts them to lookup
+ * snapshots. The site filter is applied in the query (not after `take`), so a
+ * site with older activity still sees its own saved options.
+ */
+async function loadSavedLookupSnapshots(
 	site: string | null | undefined,
 	isSuperAdmin: boolean,
-) {
+): Promise<SavedCdsLookupSnapshot[]> {
+	const normalizedSite = (site ?? "SGN") as Site;
 	const [savedCdsRows, submissionLogs] = await Promise.all([
 		prismaRPA.followUpCdsInfo.findMany({
 			take: SAVED_LOOKUP_HISTORY_LIMIT,
 			orderBy: { updatedAt: "desc" },
+			where: isSuperAdmin
+				? undefined
+				: {
+						followUp: {
+							OR: [{ domain: normalizedSite }, { domain: null }],
+						},
+					},
 			select: SAVED_CDS_INFO_SELECT,
 		}),
 		loadSavedSubmissionLogs(),
@@ -1101,12 +1119,6 @@ async function loadSavedFieldOptions(
 	const snapshots: SavedCdsLookupSnapshot[] = [];
 
 	savedCdsRows.forEach((row) => {
-		if (
-			!shouldIncludeSavedLookupForSite(row.followUp?.domain, site, isSuperAdmin)
-		) {
-			return;
-		}
-
 		const {
 			followUp,
 			updatedAt: _updatedAt,
@@ -1152,77 +1164,31 @@ async function loadSavedFieldOptions(
 		});
 	});
 
-	return buildSavedCdsFieldOptions(snapshots);
+	return snapshots;
+}
+
+/** Memoizes the snapshot load so one request never runs the scan twice. */
+function createSavedLookupSnapshotLoader(
+	site: string | null | undefined,
+	isSuperAdmin: boolean,
+) {
+	let cached: Promise<SavedCdsLookupSnapshot[]> | null = null;
+	return () => {
+		cached ??= loadSavedLookupSnapshots(site, isSuperAdmin);
+		return cached;
+	};
+}
+
+async function loadSavedFieldOptions(
+	getSnapshots: () => Promise<SavedCdsLookupSnapshot[]>,
+) {
+	return buildSavedCdsFieldOptions(await getSnapshots());
 }
 
 async function loadSavedElectronicAttachmentLookups(
-	site: string | null | undefined,
-	isSuperAdmin: boolean,
+	getSnapshots: () => Promise<SavedCdsLookupSnapshot[]>,
 ) {
-	const [savedCdsRows, submissionLogs] = await Promise.all([
-		prismaRPA.followUpCdsInfo.findMany({
-			take: SAVED_LOOKUP_HISTORY_LIMIT,
-			orderBy: { updatedAt: "desc" },
-			select: SAVED_CDS_INFO_SELECT,
-		}),
-		loadSavedSubmissionLogs(),
-	]);
-
-	const snapshots: SavedCdsLookupSnapshot[] = [];
-
-	savedCdsRows.forEach((row) => {
-		if (
-			!shouldIncludeSavedLookupForSite(row.followUp?.domain, site, isSuperAdmin)
-		) {
-			return;
-		}
-
-		const {
-			followUp,
-			updatedAt: _updatedAt,
-			electronicAttachmentRows,
-			...cdsInfo
-		} = row;
-		snapshots.push({
-			operationType: followUp?.operationType,
-			operationCode: cdsInfo.operationCode,
-			cdsInfo: {
-				...cdsInfo,
-				electronicAttachments: electronicAttachmentRows.map((item) => ({
-					attachmentNumber: item.attachmentNumber,
-					attachmentDescription: item.attachmentDescription,
-				})),
-			} as Partial<FollowUpCdsInfoRow>,
-		});
-	});
-
-	submissionLogs.forEach((log) => {
-		if (
-			!shouldIncludeSavedLookupForSite(log.followUp?.domain, site, isSuperAdmin)
-		) {
-			return;
-		}
-
-		if (!isRecord(log.requestPayload)) {
-			return;
-		}
-
-		const cdsInfo = isRecord(log.requestPayload.cdsInfo)
-			? (log.requestPayload.cdsInfo as Partial<FollowUpCdsInfoRow>)
-			: null;
-
-		if (!cdsInfo) {
-			return;
-		}
-
-		snapshots.push({
-			operationType: log.requestPayload.operationType ?? log.operationType,
-			operationCode: cdsInfo.operationCode,
-			cdsInfo,
-		});
-	});
-
-	return buildSavedElectronicAttachmentLookups(snapshots);
+	return buildSavedElectronicAttachmentLookups(await getSnapshots());
 }
 
 export async function GET(request: Request) {
@@ -1241,6 +1207,10 @@ export async function GET(request: Request) {
 		const userSite = (session.user as { site?: string | null }).site;
 		const userRole = (session.user as { role?: string | null }).role;
 		const isSuperAdmin = userRole === "SUPERADMIN";
+		const getSavedLookupSnapshots = createSavedLookupSnapshotLoader(
+			userSite,
+			isSuperAdmin,
+		);
 		const requestUrl = new URL(request.url);
 		const mode =
 			requestUrl.searchParams.get("mode") === "full" ? "full" : "fast";
@@ -1347,7 +1317,7 @@ export async function GET(request: Request) {
 								mode === "full" && CDS_ENABLE_ERP_VEHICLE_LOOKUPS,
 							onlyFields: fastModeAppFields ?? undefined,
 						}),
-						loadSavedElectronicAttachmentLookups(userSite, isSuperAdmin),
+						loadSavedElectronicAttachmentLookups(getSavedLookupSnapshots),
 					]),
 					CDS_STEP_TIMEOUT_MS,
 					"Load app CDS lookup options",
@@ -1409,7 +1379,7 @@ export async function GET(request: Request) {
 		if (shouldLoadSavedHistoryLookups) {
 			try {
 				const savedFieldOptions = await withTimeout(
-					loadSavedFieldOptions(userSite, isSuperAdmin),
+					loadSavedFieldOptions(getSavedLookupSnapshots),
 					CDS_STEP_TIMEOUT_MS,
 					"Load saved CDS lookup history",
 				);
