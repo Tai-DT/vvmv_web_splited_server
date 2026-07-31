@@ -355,7 +355,10 @@ export function DataTableContent({
 				// Calculate offset from previous columns
 				leftOffset = columns
 					.slice(0, index)
-					.reduce((acc, c) => acc + (c.getSize ? c.getSize() : c.column.getSize()), 0);
+					.reduce(
+						(acc, c) => acc + (c.getSize ? c.getSize() : c.column.getSize()),
+						0,
+					);
 				// Add drag handle width to offset if any previous column had it
 				if (hasDragHandle && index > 0) {
 					leftOffset += DRAG_HANDLE_WIDTH;
@@ -366,7 +369,10 @@ export function DataTableContent({
 		if (pin === "right") {
 			const rightOffset = columns
 				.slice(index + 1)
-				.reduce((acc, c) => acc + (c.getSize ? c.getSize() : c.column.getSize()), 0);
+				.reduce(
+					(acc, c) => acc + (c.getSize ? c.getSize() : c.column.getSize()),
+					0,
+				);
 			return { left: undefined, right: rightOffset };
 		}
 		return { left: undefined, right: undefined };
@@ -485,11 +491,20 @@ export function DataTableContent({
 									>
 										{/* Left Pinned Headers */}
 										{left.map((header, index) => {
-											const { size: columnSize, minSize, maxSize } = getColumnSize(header);
+											const {
+												size: columnSize,
+												minSize,
+												maxSize,
+											} = getColumnSize(header);
 											const columnId = header.column.id;
 											const isDragging = draggedColumnId === columnId;
 											const dropPosition = getDropPosition(columnId);
-											const { left: leftOffset } = getColumnPosition(left, index, "left", index === 0);
+											const { left: leftOffset } = getColumnPosition(
+												left,
+												index,
+												"left",
+												index === 0,
+											);
 
 											// Check if this column is pinned (left pinned columns cannot be dragged)
 											const isPinned = header.column.getIsPinned() === "left";
@@ -528,7 +543,10 @@ export function DataTableContent({
 														width: `${columnSize}px`,
 														minWidth: `${minSize}px`,
 														maxWidth: `${maxSize}px`,
-														left: leftOffset !== undefined ? `${leftOffset}px` : undefined,
+														left:
+															leftOffset !== undefined
+																? `${leftOffset}px`
+																: undefined,
 													}}
 												>
 													{/* Match row drag handle width in body so thead/td columns line up */}
@@ -578,12 +596,17 @@ export function DataTableContent({
 
 										{/* Center (Unpinned) Headers */}
 										{center.map((header, centerIndex) => {
-											const { size: columnSize, minSize, maxSize } = getColumnSize(header);
+											const {
+												size: columnSize,
+												minSize,
+												maxSize,
+											} = getColumnSize(header);
 											const columnId = header.column.id;
 											const isDragging = draggedColumnId === columnId;
 											const dropPosition = getDropPosition(columnId);
 											const isDropTarget = dropTargetColumnId === columnId;
-											const isFirstColumn = left.length === 0 && centerIndex === 0;
+											const isFirstColumn =
+												left.length === 0 && centerIndex === 0;
 
 											// Check if this column is permanently pinned
 											const isPermanentlyPinned =
@@ -621,7 +644,9 @@ export function DataTableContent({
 														maxWidth: `${maxSize}px`,
 													}}
 												>
-													{showRowDrag && isFirstColumn && <FollowUpRowDragHeaderSpacer />}
+													{showRowDrag && isFirstColumn && (
+														<FollowUpRowDragHeaderSpacer />
+													)}
 													{/* Drop indicator - left side */}
 													{!cannotDrag && dropPosition === "left" && (
 														<div className="absolute left-0 top-0 h-full w-1.5 bg-blue-500 z-30 rounded-full" />
@@ -665,11 +690,19 @@ export function DataTableContent({
 
 										{/* Right Pinned Headers */}
 										{right.map((header, index) => {
-											const { size: columnSize, minSize, maxSize } = getColumnSize(header);
+											const {
+												size: columnSize,
+												minSize,
+												maxSize,
+											} = getColumnSize(header);
 											const columnId = header.column.id;
 											const isDragging = draggedColumnId === columnId;
 											const dropPosition = getDropPosition(columnId);
-											const { right: rightOffset } = getColumnPosition(right, index, "right");
+											const { right: rightOffset } = getColumnPosition(
+												right,
+												index,
+												"right",
+											);
 											const isDropTarget = dropTargetColumnId === columnId;
 
 											// Check if this column is pinned (right pinned columns cannot be dragged)
@@ -708,7 +741,10 @@ export function DataTableContent({
 														width: `${columnSize}px`,
 														minWidth: `${minSize}px`,
 														maxWidth: `${maxSize}px`,
-														right: rightOffset !== undefined ? `${rightOffset}px` : undefined,
+														right:
+															rightOffset !== undefined
+																? `${rightOffset}px`
+																: undefined,
 													}}
 												>
 													{/* Drop indicator - left side */}
@@ -811,8 +847,17 @@ export function DataTableContent({
 											return (
 												<>
 													{left.map((cell, index) => {
-														const { size: columnSize, minSize, maxSize } = getColumnSize(cell);
-														const { left: leftOffset } = getColumnPosition(left, index, "left", index === 0);
+														const {
+															size: columnSize,
+															minSize,
+															maxSize,
+														} = getColumnSize(cell);
+														const { left: leftOffset } = getColumnPosition(
+															left,
+															index,
+															"left",
+															index === 0,
+														);
 
 														return (
 															<TableCell
@@ -822,7 +867,10 @@ export function DataTableContent({
 																	width: `${columnSize}px`,
 																	minWidth: `${minSize}px`,
 																	maxWidth: `${maxSize}px`,
-																	left: leftOffset !== undefined ? `${leftOffset}px` : undefined,
+																	left:
+																		leftOffset !== undefined
+																			? `${leftOffset}px`
+																			: undefined,
 																}}
 																className={`sticky flex-none shrink-0 z-20 border-r border-slate-200 dark:border-slate-700 shadow-[4px_0_8px_-2px_rgba(0,0,0,0.08)] dark:shadow-[4px_0_8px_-2px_rgba(0,0,0,0.25)] px-1.5 py-1 text-xs overflow-hidden select-text transition-colors duration-150 ${rowBgClasses} ${rowHoverClasses}`}
 															>
@@ -840,8 +888,13 @@ export function DataTableContent({
 													})}
 
 													{center.map((cell, index) => {
-														const { size: columnSize, minSize, maxSize } = getColumnSize(cell);
-														const isFirstColumn = isFirstColumnCenter && index === 0;
+														const {
+															size: columnSize,
+															minSize,
+															maxSize,
+														} = getColumnSize(cell);
+														const isFirstColumn =
+															isFirstColumnCenter && index === 0;
 
 														return (
 															<TableCell
@@ -872,8 +925,16 @@ export function DataTableContent({
 													})}
 
 													{right.map((cell, index) => {
-														const { size: columnSize, minSize, maxSize } = getColumnSize(cell);
-														const { right: rightOffset } = getColumnPosition(right, index, "right");
+														const {
+															size: columnSize,
+															minSize,
+															maxSize,
+														} = getColumnSize(cell);
+														const { right: rightOffset } = getColumnPosition(
+															right,
+															index,
+															"right",
+														);
 
 														return (
 															<TableCell
@@ -883,7 +944,10 @@ export function DataTableContent({
 																	width: `${columnSize}px`,
 																	minWidth: `${minSize}px`,
 																	maxWidth: `${maxSize}px`,
-																	right: rightOffset !== undefined ? `${rightOffset}px` : undefined,
+																	right:
+																		rightOffset !== undefined
+																			? `${rightOffset}px`
+																			: undefined,
 																}}
 																className={`sticky flex-none shrink-0 z-20 border-l border-slate-200 dark:border-slate-700 shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.08)] dark:shadow-[-4px_0_8px_-2px_rgba(0,0,0,0.25)] px-1.5 py-1 text-xs overflow-hidden select-text transition-colors duration-150 ${rowBgClasses} ${rowHoverClasses}`}
 															>
@@ -926,10 +990,9 @@ export function DataTableContent({
 																	)}
 																	activeTab={activeRowTabs[row.id]}
 																	onTabChange={(tab: string) =>
-																		(table.options.meta as any)?.onSubTabClick?.(
-																			row.id,
-																			tab,
-																		)
+																		(
+																			table.options.meta as any
+																		)?.onSubTabClick?.(row.id, tab)
 																	}
 																/>
 															</ExpandedDetailTableCell>

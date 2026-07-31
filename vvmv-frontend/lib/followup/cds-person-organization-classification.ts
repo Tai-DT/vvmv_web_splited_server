@@ -1,5 +1,5 @@
 export const PERSON_ORGANIZATION_CLASSIFICATION_REQUIRED_OPERATION_CODES =
-	new Set(["E11", "E15", "E21", "E31", "E41"]);
+	new Set(["E11", "E15", "E21", "E31", "E41", "E42", "E52", "E62", "E82"]);
 
 export function normalizePersonOrganizationOperationCode(value: unknown) {
 	const normalized = String(value ?? "")

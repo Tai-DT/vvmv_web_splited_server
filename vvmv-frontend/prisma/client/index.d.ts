@@ -19890,6 +19890,7 @@ export namespace Prisma {
     releaseBeforePermitCode: string | null
     taxPaymentDeadlineCode: string | null
     taxDestinationLocation: string | null
+    finalDestinationName: string | null
     estimatedArrivalAtDestinationDate: string | null
     transportDepartureDate: string | null
     note: string | null
@@ -19939,6 +19940,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber: string | null
     taxSubstituteBankCode: string | null
     creditLimitIssueYear: string | null
+    guaranteeIssueYear: string | null
     guaranteeBankCode: string | null
     creditLimitDocumentSymbol: string | null
     creditLimitDocumentNumber: string | null
@@ -20000,6 +20002,7 @@ export namespace Prisma {
     releaseBeforePermitCode: string | null
     taxPaymentDeadlineCode: string | null
     taxDestinationLocation: string | null
+    finalDestinationName: string | null
     estimatedArrivalAtDestinationDate: string | null
     transportDepartureDate: string | null
     note: string | null
@@ -20049,6 +20052,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber: string | null
     taxSubstituteBankCode: string | null
     creditLimitIssueYear: string | null
+    guaranteeIssueYear: string | null
     guaranteeBankCode: string | null
     creditLimitDocumentSymbol: string | null
     creditLimitDocumentNumber: string | null
@@ -20110,6 +20114,7 @@ export namespace Prisma {
     releaseBeforePermitCode: number
     taxPaymentDeadlineCode: number
     taxDestinationLocation: number
+    finalDestinationName: number
     estimatedArrivalAtDestinationDate: number
     transportDepartureDate: number
     note: number
@@ -20159,6 +20164,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber: number
     taxSubstituteBankCode: number
     creditLimitIssueYear: number
+    guaranteeIssueYear: number
     guaranteeBankCode: number
     creditLimitDocumentSymbol: number
     creditLimitDocumentNumber: number
@@ -20250,6 +20256,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: true
     taxPaymentDeadlineCode?: true
     taxDestinationLocation?: true
+    finalDestinationName?: true
     estimatedArrivalAtDestinationDate?: true
     transportDepartureDate?: true
     note?: true
@@ -20299,6 +20306,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: true
     taxSubstituteBankCode?: true
     creditLimitIssueYear?: true
+    guaranteeIssueYear?: true
     guaranteeBankCode?: true
     creditLimitDocumentSymbol?: true
     creditLimitDocumentNumber?: true
@@ -20360,6 +20368,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: true
     taxPaymentDeadlineCode?: true
     taxDestinationLocation?: true
+    finalDestinationName?: true
     estimatedArrivalAtDestinationDate?: true
     transportDepartureDate?: true
     note?: true
@@ -20409,6 +20418,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: true
     taxSubstituteBankCode?: true
     creditLimitIssueYear?: true
+    guaranteeIssueYear?: true
     guaranteeBankCode?: true
     creditLimitDocumentSymbol?: true
     creditLimitDocumentNumber?: true
@@ -20470,6 +20480,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: true
     taxPaymentDeadlineCode?: true
     taxDestinationLocation?: true
+    finalDestinationName?: true
     estimatedArrivalAtDestinationDate?: true
     transportDepartureDate?: true
     note?: true
@@ -20519,6 +20530,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: true
     taxSubstituteBankCode?: true
     creditLimitIssueYear?: true
+    guaranteeIssueYear?: true
     guaranteeBankCode?: true
     creditLimitDocumentSymbol?: true
     creditLimitDocumentNumber?: true
@@ -20667,6 +20679,7 @@ export namespace Prisma {
     releaseBeforePermitCode: string | null
     taxPaymentDeadlineCode: string | null
     taxDestinationLocation: string | null
+    finalDestinationName: string | null
     estimatedArrivalAtDestinationDate: string | null
     transportDepartureDate: string | null
     note: string | null
@@ -20716,6 +20729,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber: string | null
     taxSubstituteBankCode: string | null
     creditLimitIssueYear: string | null
+    guaranteeIssueYear: string | null
     guaranteeBankCode: string | null
     creditLimitDocumentSymbol: string | null
     creditLimitDocumentNumber: string | null
@@ -20796,6 +20810,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: boolean
     taxPaymentDeadlineCode?: boolean
     taxDestinationLocation?: boolean
+    finalDestinationName?: boolean
     estimatedArrivalAtDestinationDate?: boolean
     transportDepartureDate?: boolean
     note?: boolean
@@ -20845,6 +20860,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: boolean
     taxSubstituteBankCode?: boolean
     creditLimitIssueYear?: boolean
+    guaranteeIssueYear?: boolean
     guaranteeBankCode?: boolean
     creditLimitDocumentSymbol?: boolean
     creditLimitDocumentNumber?: boolean
@@ -20914,6 +20930,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: boolean
     taxPaymentDeadlineCode?: boolean
     taxDestinationLocation?: boolean
+    finalDestinationName?: boolean
     estimatedArrivalAtDestinationDate?: boolean
     transportDepartureDate?: boolean
     note?: boolean
@@ -20963,6 +20980,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: boolean
     taxSubstituteBankCode?: boolean
     creditLimitIssueYear?: boolean
+    guaranteeIssueYear?: boolean
     guaranteeBankCode?: boolean
     creditLimitDocumentSymbol?: boolean
     creditLimitDocumentNumber?: boolean
@@ -21025,6 +21043,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: boolean
     taxPaymentDeadlineCode?: boolean
     taxDestinationLocation?: boolean
+    finalDestinationName?: boolean
     estimatedArrivalAtDestinationDate?: boolean
     transportDepartureDate?: boolean
     note?: boolean
@@ -21074,6 +21093,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: boolean
     taxSubstituteBankCode?: boolean
     creditLimitIssueYear?: boolean
+    guaranteeIssueYear?: boolean
     guaranteeBankCode?: boolean
     creditLimitDocumentSymbol?: boolean
     creditLimitDocumentNumber?: boolean
@@ -21136,6 +21156,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: boolean
     taxPaymentDeadlineCode?: boolean
     taxDestinationLocation?: boolean
+    finalDestinationName?: boolean
     estimatedArrivalAtDestinationDate?: boolean
     transportDepartureDate?: boolean
     note?: boolean
@@ -21185,6 +21206,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: boolean
     taxSubstituteBankCode?: boolean
     creditLimitIssueYear?: boolean
+    guaranteeIssueYear?: boolean
     guaranteeBankCode?: boolean
     creditLimitDocumentSymbol?: boolean
     creditLimitDocumentNumber?: boolean
@@ -21192,7 +21214,7 @@ export namespace Prisma {
     guaranteeDocumentNumber?: boolean
   }
 
-  export type FollowUpCdsInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "followUpId" | "operationCode" | "transportMethodCode" | "customsCode" | "personOrganizationClassification" | "declarationProcessingDeptCode" | "importExportUnitName" | "importExportBusinessAddress" | "partnerName" | "partnerAddress1" | "partnerAddress2" | "partnerAddress3" | "partnerAddress4" | "exportCountryCode" | "billOfLading" | "packageQuantity" | "packageType" | "grossWeightTotal" | "weightUnit" | "containerQuantity" | "warehouseLocationCode" | "unloadingLocationCode" | "loadingLocationCode" | "transportVehicleCode" | "departureArrivalDate" | "licenseNumber" | "warehouseLocationName" | "unloadingLocationName" | "loadingLocationName" | "transportVehicleName" | "commercialInvoice" | "invoiceFormClassificationCode" | "commercialInvoiceDate" | "invoicePriceCondition" | "paymentMethod" | "invoiceClassificationCode" | "declaredValue" | "totalInvoiceValue" | "totalTaxableValue" | "invoiceCurrency" | "taxableValueCurrencyCode" | "valuationDeclarationTypeCode" | "transportFee" | "transportFeeClassificationCode" | "transportFeeCurrencyCode" | "insuranceFee" | "insuranceFeeClassificationCode" | "insuranceFeeCurrencyCode" | "taxPayer" | "releaseBeforePermitCode" | "taxPaymentDeadlineCode" | "taxDestinationLocation" | "estimatedArrivalAtDestinationDate" | "transportDepartureDate" | "note" | "contractNumber" | "contractDate" | "contractGoodsDate" | "importLicense" | "internalBusinessManagementNumber" | "otherLegalDocumentCode" | "valuationDeclarationDetail" | "truckLoadingLocationCode" | "truckLoadingLocationName" | "truckLoadingLocationAddress" | "cdsStatus" | "ecusDeclarationId" | "registeredAt" | "registeredBy" | "createdAt" | "updatedAt" | "airportSupervisionEnabled" | "branchNumberPart1" | "branchNumberPart2" | "businessTypeGroup" | "exchangeRate" | "netWeight" | "cargoClassificationCode" | "correspondingDeclarationNumber" | "customsDeclarantCode" | "declarationNumber" | "declarationSequenceNumber" | "entrustedExporterName" | "entrustedImporterCode" | "entrustedImporterName" | "expectedDeclarationDate" | "exporterCode" | "exporterPostalCode" | "firstDeclarationNumber" | "importerCode" | "importerPhone" | "importerPostalCode" | "inspectionResultCode" | "packageMarks" | "reExportDeadline" | "seaportSupervisionEnabled" | "electronicInvoiceReceiptNumber" | "insuranceRegistrationNumber" | "valuationSummaryReceiptNumber" | "taxSubstituteBankCode" | "creditLimitIssueYear" | "guaranteeBankCode" | "creditLimitDocumentSymbol" | "creditLimitDocumentNumber" | "guaranteeDocumentSymbol" | "guaranteeDocumentNumber", ExtArgs["result"]["followUpCdsInfo"]>
+  export type FollowUpCdsInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "followUpId" | "operationCode" | "transportMethodCode" | "customsCode" | "personOrganizationClassification" | "declarationProcessingDeptCode" | "importExportUnitName" | "importExportBusinessAddress" | "partnerName" | "partnerAddress1" | "partnerAddress2" | "partnerAddress3" | "partnerAddress4" | "exportCountryCode" | "billOfLading" | "packageQuantity" | "packageType" | "grossWeightTotal" | "weightUnit" | "containerQuantity" | "warehouseLocationCode" | "unloadingLocationCode" | "loadingLocationCode" | "transportVehicleCode" | "departureArrivalDate" | "licenseNumber" | "warehouseLocationName" | "unloadingLocationName" | "loadingLocationName" | "transportVehicleName" | "commercialInvoice" | "invoiceFormClassificationCode" | "commercialInvoiceDate" | "invoicePriceCondition" | "paymentMethod" | "invoiceClassificationCode" | "declaredValue" | "totalInvoiceValue" | "totalTaxableValue" | "invoiceCurrency" | "taxableValueCurrencyCode" | "valuationDeclarationTypeCode" | "transportFee" | "transportFeeClassificationCode" | "transportFeeCurrencyCode" | "insuranceFee" | "insuranceFeeClassificationCode" | "insuranceFeeCurrencyCode" | "taxPayer" | "releaseBeforePermitCode" | "taxPaymentDeadlineCode" | "taxDestinationLocation" | "finalDestinationName" | "estimatedArrivalAtDestinationDate" | "transportDepartureDate" | "note" | "contractNumber" | "contractDate" | "contractGoodsDate" | "importLicense" | "internalBusinessManagementNumber" | "otherLegalDocumentCode" | "valuationDeclarationDetail" | "truckLoadingLocationCode" | "truckLoadingLocationName" | "truckLoadingLocationAddress" | "cdsStatus" | "ecusDeclarationId" | "registeredAt" | "registeredBy" | "createdAt" | "updatedAt" | "airportSupervisionEnabled" | "branchNumberPart1" | "branchNumberPart2" | "businessTypeGroup" | "exchangeRate" | "netWeight" | "cargoClassificationCode" | "correspondingDeclarationNumber" | "customsDeclarantCode" | "declarationNumber" | "declarationSequenceNumber" | "entrustedExporterName" | "entrustedImporterCode" | "entrustedImporterName" | "expectedDeclarationDate" | "exporterCode" | "exporterPostalCode" | "firstDeclarationNumber" | "importerCode" | "importerPhone" | "importerPostalCode" | "inspectionResultCode" | "packageMarks" | "reExportDeadline" | "seaportSupervisionEnabled" | "electronicInvoiceReceiptNumber" | "insuranceRegistrationNumber" | "valuationSummaryReceiptNumber" | "taxSubstituteBankCode" | "creditLimitIssueYear" | "guaranteeIssueYear" | "guaranteeBankCode" | "creditLimitDocumentSymbol" | "creditLimitDocumentNumber" | "guaranteeDocumentSymbol" | "guaranteeDocumentNumber", ExtArgs["result"]["followUpCdsInfo"]>
   export type FollowUpCdsInfoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     billItemRows?: boolean | FollowUpCdsInfo$billItemRowsArgs<ExtArgs>
     valuationAdjustmentRows?: boolean | FollowUpCdsInfo$valuationAdjustmentRowsArgs<ExtArgs>
@@ -21275,6 +21297,7 @@ export namespace Prisma {
       releaseBeforePermitCode: string | null
       taxPaymentDeadlineCode: string | null
       taxDestinationLocation: string | null
+      finalDestinationName: string | null
       estimatedArrivalAtDestinationDate: string | null
       transportDepartureDate: string | null
       note: string | null
@@ -21324,6 +21347,7 @@ export namespace Prisma {
       valuationSummaryReceiptNumber: string | null
       taxSubstituteBankCode: string | null
       creditLimitIssueYear: string | null
+      guaranteeIssueYear: string | null
       guaranteeBankCode: string | null
       creditLimitDocumentSymbol: string | null
       creditLimitDocumentNumber: string | null
@@ -21812,6 +21836,7 @@ export namespace Prisma {
     readonly releaseBeforePermitCode: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly taxPaymentDeadlineCode: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly taxDestinationLocation: FieldRef<"FollowUpCdsInfo", 'String'>
+    readonly finalDestinationName: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly estimatedArrivalAtDestinationDate: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly transportDepartureDate: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly note: FieldRef<"FollowUpCdsInfo", 'String'>
@@ -21861,6 +21886,7 @@ export namespace Prisma {
     readonly valuationSummaryReceiptNumber: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly taxSubstituteBankCode: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly creditLimitIssueYear: FieldRef<"FollowUpCdsInfo", 'String'>
+    readonly guaranteeIssueYear: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly guaranteeBankCode: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly creditLimitDocumentSymbol: FieldRef<"FollowUpCdsInfo", 'String'>
     readonly creditLimitDocumentNumber: FieldRef<"FollowUpCdsInfo", 'String'>
@@ -82472,6 +82498,7 @@ export namespace Prisma {
     releaseBeforePermitCode: 'releaseBeforePermitCode',
     taxPaymentDeadlineCode: 'taxPaymentDeadlineCode',
     taxDestinationLocation: 'taxDestinationLocation',
+    finalDestinationName: 'finalDestinationName',
     estimatedArrivalAtDestinationDate: 'estimatedArrivalAtDestinationDate',
     transportDepartureDate: 'transportDepartureDate',
     note: 'note',
@@ -82521,6 +82548,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber: 'valuationSummaryReceiptNumber',
     taxSubstituteBankCode: 'taxSubstituteBankCode',
     creditLimitIssueYear: 'creditLimitIssueYear',
+    guaranteeIssueYear: 'guaranteeIssueYear',
     guaranteeBankCode: 'guaranteeBankCode',
     creditLimitDocumentSymbol: 'creditLimitDocumentSymbol',
     creditLimitDocumentNumber: 'creditLimitDocumentNumber',
@@ -84860,6 +84888,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     taxPaymentDeadlineCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     taxDestinationLocation?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
+    finalDestinationName?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     estimatedArrivalAtDestinationDate?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     transportDepartureDate?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     note?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
@@ -84909,6 +84938,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     taxSubstituteBankCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     creditLimitIssueYear?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
+    guaranteeIssueYear?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     guaranteeBankCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     creditLimitDocumentSymbol?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     creditLimitDocumentNumber?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
@@ -84977,6 +85007,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: SortOrderInput | SortOrder
     taxPaymentDeadlineCode?: SortOrderInput | SortOrder
     taxDestinationLocation?: SortOrderInput | SortOrder
+    finalDestinationName?: SortOrderInput | SortOrder
     estimatedArrivalAtDestinationDate?: SortOrderInput | SortOrder
     transportDepartureDate?: SortOrderInput | SortOrder
     note?: SortOrderInput | SortOrder
@@ -85026,6 +85057,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: SortOrderInput | SortOrder
     taxSubstituteBankCode?: SortOrderInput | SortOrder
     creditLimitIssueYear?: SortOrderInput | SortOrder
+    guaranteeIssueYear?: SortOrderInput | SortOrder
     guaranteeBankCode?: SortOrderInput | SortOrder
     creditLimitDocumentSymbol?: SortOrderInput | SortOrder
     creditLimitDocumentNumber?: SortOrderInput | SortOrder
@@ -85097,6 +85129,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     taxPaymentDeadlineCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     taxDestinationLocation?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
+    finalDestinationName?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     estimatedArrivalAtDestinationDate?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     transportDepartureDate?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     note?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
@@ -85146,6 +85179,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     taxSubstituteBankCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     creditLimitIssueYear?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
+    guaranteeIssueYear?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     guaranteeBankCode?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     creditLimitDocumentSymbol?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
     creditLimitDocumentNumber?: StringNullableFilter<"FollowUpCdsInfo"> | string | null
@@ -85214,6 +85248,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: SortOrderInput | SortOrder
     taxPaymentDeadlineCode?: SortOrderInput | SortOrder
     taxDestinationLocation?: SortOrderInput | SortOrder
+    finalDestinationName?: SortOrderInput | SortOrder
     estimatedArrivalAtDestinationDate?: SortOrderInput | SortOrder
     transportDepartureDate?: SortOrderInput | SortOrder
     note?: SortOrderInput | SortOrder
@@ -85263,6 +85298,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: SortOrderInput | SortOrder
     taxSubstituteBankCode?: SortOrderInput | SortOrder
     creditLimitIssueYear?: SortOrderInput | SortOrder
+    guaranteeIssueYear?: SortOrderInput | SortOrder
     guaranteeBankCode?: SortOrderInput | SortOrder
     creditLimitDocumentSymbol?: SortOrderInput | SortOrder
     creditLimitDocumentNumber?: SortOrderInput | SortOrder
@@ -85332,6 +85368,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     taxPaymentDeadlineCode?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     taxDestinationLocation?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
+    finalDestinationName?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     estimatedArrivalAtDestinationDate?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     transportDepartureDate?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     note?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
@@ -85381,6 +85418,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     taxSubstituteBankCode?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     creditLimitIssueYear?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
+    guaranteeIssueYear?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     guaranteeBankCode?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     creditLimitDocumentSymbol?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
     creditLimitDocumentNumber?: StringNullableWithAggregatesFilter<"FollowUpCdsInfo"> | string | null
@@ -91743,6 +91781,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -91792,6 +91831,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -91860,6 +91900,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -91909,6 +91950,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -91975,6 +92017,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92024,6 +92067,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92092,6 +92136,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92141,6 +92186,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92208,6 +92254,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -92257,6 +92304,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -92317,6 +92365,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92366,6 +92415,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92427,6 +92477,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -92476,6 +92527,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -99664,6 +99716,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: SortOrder
     taxPaymentDeadlineCode?: SortOrder
     taxDestinationLocation?: SortOrder
+    finalDestinationName?: SortOrder
     estimatedArrivalAtDestinationDate?: SortOrder
     transportDepartureDate?: SortOrder
     note?: SortOrder
@@ -99713,6 +99766,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: SortOrder
     taxSubstituteBankCode?: SortOrder
     creditLimitIssueYear?: SortOrder
+    guaranteeIssueYear?: SortOrder
     guaranteeBankCode?: SortOrder
     creditLimitDocumentSymbol?: SortOrder
     creditLimitDocumentNumber?: SortOrder
@@ -99788,6 +99842,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: SortOrder
     taxPaymentDeadlineCode?: SortOrder
     taxDestinationLocation?: SortOrder
+    finalDestinationName?: SortOrder
     estimatedArrivalAtDestinationDate?: SortOrder
     transportDepartureDate?: SortOrder
     note?: SortOrder
@@ -99837,6 +99892,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: SortOrder
     taxSubstituteBankCode?: SortOrder
     creditLimitIssueYear?: SortOrder
+    guaranteeIssueYear?: SortOrder
     guaranteeBankCode?: SortOrder
     creditLimitDocumentSymbol?: SortOrder
     creditLimitDocumentNumber?: SortOrder
@@ -99898,6 +99954,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: SortOrder
     taxPaymentDeadlineCode?: SortOrder
     taxDestinationLocation?: SortOrder
+    finalDestinationName?: SortOrder
     estimatedArrivalAtDestinationDate?: SortOrder
     transportDepartureDate?: SortOrder
     note?: SortOrder
@@ -99947,6 +100004,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: SortOrder
     taxSubstituteBankCode?: SortOrder
     creditLimitIssueYear?: SortOrder
+    guaranteeIssueYear?: SortOrder
     guaranteeBankCode?: SortOrder
     creditLimitDocumentSymbol?: SortOrder
     creditLimitDocumentNumber?: SortOrder
@@ -111307,6 +111365,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -111356,6 +111415,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -111422,6 +111482,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -111471,6 +111532,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -111974,6 +112036,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112023,6 +112086,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112089,6 +112153,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112138,6 +112203,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -112805,6 +112871,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -112854,6 +112921,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -112921,6 +112989,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -112970,6 +113039,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -113051,6 +113121,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113100,6 +113171,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113167,6 +113239,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113216,6 +113289,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113281,6 +113355,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -113330,6 +113405,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -113397,6 +113473,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -113446,6 +113523,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -113527,6 +113605,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113576,6 +113655,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113643,6 +113723,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113692,6 +113773,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -113757,6 +113839,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -113806,6 +113889,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -113873,6 +113957,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -113922,6 +114007,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -114003,6 +114089,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114052,6 +114139,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114119,6 +114207,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114168,6 +114257,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114233,6 +114323,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -114282,6 +114373,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -114349,6 +114441,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -114398,6 +114491,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -114479,6 +114573,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114528,6 +114623,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114595,6 +114691,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114644,6 +114741,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -114709,6 +114807,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -114758,6 +114857,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -114825,6 +114925,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -114874,6 +114975,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -114955,6 +115057,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115004,6 +115107,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115071,6 +115175,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115120,6 +115225,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115185,6 +115291,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -115234,6 +115341,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -115301,6 +115409,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: string | null
     taxPaymentDeadlineCode?: string | null
     taxDestinationLocation?: string | null
+    finalDestinationName?: string | null
     estimatedArrivalAtDestinationDate?: string | null
     transportDepartureDate?: string | null
     note?: string | null
@@ -115350,6 +115459,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: string | null
     taxSubstituteBankCode?: string | null
     creditLimitIssueYear?: string | null
+    guaranteeIssueYear?: string | null
     guaranteeBankCode?: string | null
     creditLimitDocumentSymbol?: string | null
     creditLimitDocumentNumber?: string | null
@@ -115431,6 +115541,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115480,6 +115591,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115547,6 +115659,7 @@ export namespace Prisma {
     releaseBeforePermitCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxPaymentDeadlineCode?: NullableStringFieldUpdateOperationsInput | string | null
     taxDestinationLocation?: NullableStringFieldUpdateOperationsInput | string | null
+    finalDestinationName?: NullableStringFieldUpdateOperationsInput | string | null
     estimatedArrivalAtDestinationDate?: NullableStringFieldUpdateOperationsInput | string | null
     transportDepartureDate?: NullableStringFieldUpdateOperationsInput | string | null
     note?: NullableStringFieldUpdateOperationsInput | string | null
@@ -115596,6 +115709,7 @@ export namespace Prisma {
     valuationSummaryReceiptNumber?: NullableStringFieldUpdateOperationsInput | string | null
     taxSubstituteBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
+    guaranteeIssueYear?: NullableStringFieldUpdateOperationsInput | string | null
     guaranteeBankCode?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentSymbol?: NullableStringFieldUpdateOperationsInput | string | null
     creditLimitDocumentNumber?: NullableStringFieldUpdateOperationsInput | string | null

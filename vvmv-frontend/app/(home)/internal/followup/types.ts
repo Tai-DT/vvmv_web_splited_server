@@ -383,6 +383,7 @@ export type FollowUpCdsInfoRow = {
 	taxDestinationLocation?: string | null;
 	taxSubstituteBankCode?: string | null;
 	creditLimitIssueYear?: string | null;
+	guaranteeIssueYear?: string | null;
 	guaranteeBankCode?: string | null;
 	creditLimitDocumentSymbol?: string | null;
 	creditLimitDocumentNumber?: string | null;

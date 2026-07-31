@@ -11,7 +11,8 @@ function truncateToChars(text: string, maxChars: number): string {
 	if (text.length <= maxChars) {
 		return text;
 	}
-	return `${text.slice(0, maxChars)}\n[...đã cắt bớt để giới hạn độ dài.]`;
+	// Keep the tail: the newest turns carry the instruction being answered.
+	return `[...đã cắt bớt phần đầu để giới hạn độ dài.]\n${text.slice(-maxChars)}`;
 }
 
 /**

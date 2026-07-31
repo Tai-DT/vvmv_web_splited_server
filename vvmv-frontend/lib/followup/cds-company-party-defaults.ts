@@ -167,7 +167,7 @@ export function buildCdsCompanyPartyDefaultWarnings(
 		}
 
 		const message = currentValue
-			? `${config.label} trên form khác dữ liệu chuẩn theo MST. Khi truyền qua app sẽ ưu tiên giữ giá trị trên form hiện tại.`
+			? `${config.label} trên form khác dữ liệu chuẩn theo MST. Khi truyền qua app sẽ dùng dữ liệu chuẩn theo MST: "${expectedValue}".`
 			: `${config.label} đang trống trên form. Khi truyền qua app sẽ dùng dữ liệu chuẩn theo MST: "${expectedValue}".`;
 
 		return [
@@ -192,16 +192,12 @@ export function applyCdsCompanyPartyDefaults(
 		return next;
 	}
 
+	// Party identity fields must match the master data registered under the MST
+	// when the declaration is pushed to the app, so defaults override the form.
 	for (const config of COMPANY_PARTY_FIELDS) {
-		const fallbackValue = cleanText(defaults[config.field]);
-		if (
-			shouldUseFallbackCompanyPartyDefault(
-				config.field,
-				next[config.field],
-				fallbackValue,
-			)
-		) {
-			next[config.field] = fallbackValue;
+		const defaultValue = cleanText(defaults[config.field]);
+		if (defaultValue) {
+			next[config.field] = defaultValue;
 		}
 	}
 

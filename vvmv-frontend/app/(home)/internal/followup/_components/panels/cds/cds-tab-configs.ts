@@ -327,7 +327,8 @@ export const EXPORT_TAB_CONFIGS: CdsInfoTabConfig[] = [
 			createCompositeSection("Thông tin đính kèm", []),
 			createCompositeSection("Thông tin vận chuyển", [
 				{
-					sectionTitle: "Thông tin vận chuyển",
+					// These keys live in the "Thông tin thuế" section config.
+					sectionTitle: "Thông tin thuế",
 					keys: [
 						{
 							key: "transportDepartureDate",
@@ -346,8 +347,12 @@ export const EXPORT_TAB_CONFIGS: CdsInfoTabConfig[] = [
 			]),
 			createCompositeSection("Thông tin khác", [
 				{
-					sectionTitle: "Thông tin khác",
-					keys: ["note", "internalBusinessManagementNumber"],
+					sectionTitle: "Thông tin thuế",
+					keys: ["note"],
+				},
+				{
+					sectionTitle: "Khác",
+					keys: ["internalBusinessManagementNumber"],
 				},
 			]),
 		],

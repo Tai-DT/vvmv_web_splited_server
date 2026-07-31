@@ -22,6 +22,7 @@ function cleanPromptAssignedValue(value: string) {
 export function extractAssignedPromptValue(
 	normalizedPrompt: string,
 	label: string,
+	originalPrompt?: string,
 ) {
 	const assignmentMatch = normalizedPrompt.match(
 		new RegExp(`${label}[\\s\\S]{0,140}?(?:\\bla\\b|:|=)\\s*([^\\n;,]+)`, "i"),
@@ -30,7 +31,22 @@ export function extractAssignedPromptValue(
 		return null;
 	}
 
-	const cleaned = cleanPromptAssignedValue(assignmentMatch[1]);
+	// Free-text values must come from the original prompt (with diacritics and
+	// casing), not the accent-stripped search text. Offsets line up only when
+	// normalization preserved the character count.
+	let rawValue = assignmentMatch[1];
+	if (originalPrompt && originalPrompt.length === normalizedPrompt.length) {
+		const valueStart =
+			(assignmentMatch.index ?? 0) +
+			assignmentMatch[0].length -
+			assignmentMatch[1].length;
+		rawValue = originalPrompt.slice(
+			valueStart,
+			valueStart + assignmentMatch[1].length,
+		);
+	}
+
+	const cleaned = cleanPromptAssignedValue(rawValue);
 	return cleaned === "" ? null : cleaned;
 }
 
@@ -57,8 +73,13 @@ function pickAssignedTextValue(
 	normalizedPrompt: string,
 	label: string,
 	maxLength = 255,
+	originalPrompt?: string,
 ) {
-	const assigned = extractAssignedPromptValue(normalizedPrompt, label);
+	const assigned = extractAssignedPromptValue(
+		normalizedPrompt,
+		label,
+		originalPrompt,
+	);
 	if (!assigned) {
 		return null;
 	}
@@ -78,6 +99,7 @@ export function extractCdsInfoPatchFromPrompt(
 	promptText: string,
 ): Partial<FollowUpCdsInfoRow> {
 	const normalized = normalizePromptSearchText(promptText);
+	const original = promptText.normalize("NFC");
 	const patch: Partial<FollowUpCdsInfoRow> = {};
 	const deptContext =
 		"(?:ma\\s+bo\\s+phan\\s+xu\\s+ly(?:\\s+(?:to\\s+khai|tk))?|bo\\s+phan\\s+xu\\s+ly|ma\\s+bo\\s+phan|ma\\s+xu\\s+ly|xu\\s+ly\\s+to\\s+khai|declaration\\s+processing)";
@@ -217,15 +239,6 @@ export function extractCdsInfoPatchFromPrompt(
 		patch.billOfLading = billValue;
 	}
 
-	const billDateLabel = "(?:ngay\\s+van\\s+don|bill\\s+date)";
-	const billDateRaw = pickAssignedTextValue(normalized, billDateLabel, 30);
-	const billDateToken = billDateRaw?.match(
-		/\b(\d{4}[-/]\d{1,2}[-/]\d{1,2}|\d{1,2}[-/]\d{1,2}[-/]\d{4})\b/,
-	)?.[1];
-	if (billDateToken) {
-		patch.commercialInvoiceDate = billDateToken.replace(/\//g, "-");
-	}
-
 	const loadingCodeLabel =
 		"(?:ma\\s+dia\\s+diem\\s+xep\\s+hang|dia\\s+diem\\s+xep\\s+hang\\s+ma|loading\\s+location\\s+code)";
 	const loadingCodeRaw = pickAssignedTextValue(
@@ -255,7 +268,12 @@ export function extractCdsInfoPatchFromPrompt(
 
 	const loadingNameLabel =
 		"(?:ten\\s+dia\\s+diem\\s+xep\\s+hang|ten\\s+noi\\s+xep\\s+hang|loading\\s+location\\s+name)";
-	const loadingName = pickAssignedTextValue(normalized, loadingNameLabel, 140);
+	const loadingName = pickAssignedTextValue(
+		normalized,
+		loadingNameLabel,
+		140,
+		original,
+	);
 	if (loadingName) {
 		patch.loadingLocationName = loadingName;
 	}
@@ -266,6 +284,7 @@ export function extractCdsInfoPatchFromPrompt(
 		normalized,
 		unloadingNameLabel,
 		140,
+		original,
 	);
 	if (unloadingName) {
 		patch.unloadingLocationName = unloadingName;
@@ -306,6 +325,7 @@ export function extractCdsInfoPatchFromPrompt(
 		normalized,
 		valuationDetailLabel,
 		400,
+		original,
 	);
 	if (valuationDetail) {
 		patch.valuationDeclarationDetail = valuationDetail;

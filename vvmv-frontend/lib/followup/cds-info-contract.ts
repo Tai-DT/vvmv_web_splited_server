@@ -33,7 +33,6 @@ export const LEGACY_CDS_INFO_FIELD_ALIASES: Record<string, string> = {
 	finalDestinationCode: "taxDestinationLocation",
 	departureDate: "departureArrivalDate",
 	marksAndNumbers: "packageMarks",
-	guaranteeIssueYear: "creditLimitIssueYear",
 };
 
 export const PERSISTED_CDS_INFO_FIELDS = new Set([
@@ -116,8 +115,10 @@ export const PERSISTED_CDS_INFO_FIELDS = new Set([
 	"releaseBeforePermitCode",
 	"taxPaymentDeadlineCode",
 	"taxDestinationLocation",
+	"finalDestinationName",
 	"taxSubstituteBankCode",
 	"creditLimitIssueYear",
+	"guaranteeIssueYear",
 	"guaranteeBankCode",
 	"creditLimitDocumentSymbol",
 	"creditLimitDocumentNumber",

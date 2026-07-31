@@ -812,7 +812,8 @@ function buildLegacyHeaderSheetRows(
 		"Số CT hạn mức": cdsInfo.creditLimitDocumentNumber,
 		"Mã xác định thời hạn nộp thuế": cdsInfo.taxPaymentDeadlineCode,
 		"Mã ngân hàng bảo lãnh": cdsInfo.guaranteeBankCode,
-		"Năm phát hành bảo lãnh": cdsInfo.creditLimitIssueYear,
+		"Năm phát hành bảo lãnh":
+			cdsInfo.guaranteeIssueYear ?? cdsInfo.creditLimitIssueYear,
 		"Ký hiệu CT bảo lãnh": cdsInfo.guaranteeDocumentSymbol,
 		"Số hiệu CT bảo lãnh": cdsInfo.guaranteeDocumentNumber,
 		"Số HĐ": cdsInfo.contractNumber ?? followUp.poNumber,

@@ -1,6 +1,7 @@
 "use client";
 
 import { FilePlus2, FileText, Printer, Search } from "lucide-react";
+import { isPersonOrganizationClassificationRequiredForOperationCode } from "@/lib/followup/cds-person-organization-classification";
 import { cn } from "@/lib/utils";
 import { BufferedTextarea } from "../cds-classic-ui";
 import {
@@ -36,6 +37,7 @@ export function CdsExportGeneralTab({
 	renderLookupCodeAndName,
 	renderLookupPickerButton,
 	renderInfoButton,
+	renderPrintCargoIdentificationButton,
 	renderExportSectionHeader,
 	getExportFieldLockOptions,
 	valuationAllocationRatioTotal,
@@ -246,6 +248,18 @@ export function CdsExportGeneralTab({
 								>
 									<div className={lookupFieldBoxCls}>
 										{renderLookupCodeAndName("operationCode")}
+									</div>
+								</Row>
+
+								<Row
+									label="Phân loại cá nhân/tổ chức"
+									required={isPersonOrganizationClassificationRequiredForOperationCode(
+										data.operationCode,
+									)}
+									labelWidth={topLeftLabelWidth}
+								>
+									<div className={shortFieldBoxCls}>
+										{renderClassicSelect("personOrganizationClassification")}
 									</div>
 								</Row>
 
@@ -535,14 +549,11 @@ export function CdsExportGeneralTab({
 											className: "h-[22px] w-[24px] px-0",
 										},
 									)}
-									{renderInfoButton(
-										"In định danh chưa được bật cho màn tờ khai xuất khẩu.",
-										{
-											ariaLabel: "In định danh vận đơn",
-											icon: <Printer aria-hidden="true" className="size-3.5" />,
-											className: "h-[22px] w-[24px] px-0",
-										},
-									)}
+									{renderPrintCargoIdentificationButton({
+										ariaLabel: "In định danh vận đơn",
+										icon: <Printer aria-hidden="true" className="size-3.5" />,
+										className: "h-[22px] w-[24px] px-0",
+									})}
 								</div>
 							</Row>
 
@@ -635,7 +646,7 @@ export function CdsExportGeneralTab({
 								className={sectionInsetCls}
 							>
 								<div className={dateFieldBoxCls}>
-									{renderClassicDateInput("departureDate")}
+									{renderClassicDateInput("departureArrivalDate")}
 								</div>
 							</Row>
 
@@ -816,11 +827,11 @@ export function CdsExportGeneralTab({
 						<div className="space-y-[3px]">
 							<div className={compactSectionGridCls}>
 								<Row
-									label="Phân loại không cần quy đổi VNĐ"
+									label="Mã phân loại tờ khai trị giá"
 									labelWidth={sectionPrimaryLabelWidth}
 								>
 									<div className={shortFieldBoxCls}>
-										{renderClassicInput("valuationDeclarationTypeCode")}
+										{renderClassicSelect("valuationDeclarationTypeCode")}
 									</div>
 								</Row>
 								<RightRow
@@ -906,7 +917,7 @@ export function CdsExportGeneralTab({
 									labelWidth={sectionPrimaryLabelWidth}
 								>
 									<div className={tripleFieldBoxCls}>
-										{renderClassicInput("creditLimitIssueYear")}
+										{renderClassicInput("guaranteeIssueYear")}
 									</div>
 								</Row>
 								<RightRow

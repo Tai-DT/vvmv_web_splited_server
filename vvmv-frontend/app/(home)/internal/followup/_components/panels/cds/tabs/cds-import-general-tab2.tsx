@@ -479,7 +479,7 @@ export function CdsImportGeneralTab2({
 							<div className={taxTripleGridCls}>
 								<Row label="Năm phát hành bảo lãnh">
 									<div className={tripleFieldBoxCls}>
-										{renderClassicInput("creditLimitIssueYear")}
+										{renderClassicInput("guaranteeIssueYear")}
 									</div>
 								</Row>
 								<RightRow
@@ -509,13 +509,9 @@ export function CdsImportGeneralTab2({
 					<SectionBlock title="Thông tin vận chuyển">
 						<div className="space-y-[3px]">
 							<div className={compactSectionGridCls}>
-								<Row label="Ngày được phép nhập kho đầu tiên">
-									<div className={dateFieldBoxCls}>
-										{renderClassicDateInput(
-											"estimatedArrivalAtDestinationDate",
-										)}
-									</div>
-								</Row>
+								{/* "Ngày đến địa điểm đích" được khai ở khối vận chuyển bảo
+								    thuế bên dưới; không bind lại estimatedArrivalAtDestinationDate
+								    tại đây để tránh hai ô ghi đè lẫn nhau. */}
 								<RightRow label="Ngày khởi hành vận chuyển">
 									<div className={dateFieldBoxCls}>
 										{renderClassicDateInput("transportDepartureDate")}
