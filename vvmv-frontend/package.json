@@ -19,6 +19,7 @@
 		"check:api-routing": "node scripts/validate-api-routing.mjs",
 		"cds:import-lookups": "tsx scripts/import-cds-lookups.ts",
 		"cds:sync-app-lookups": "tsx scripts/sync-app-field-options-to-cds-lookup.ts",
+		"cds:ai-batch": "tsx scripts/run-cds-ai-batch.ts",
 		"partners:backfill-invoice-profiles": "node scripts/backfill-partner-invoice-profiles.mjs"
 	},
 	"dependencies": {
