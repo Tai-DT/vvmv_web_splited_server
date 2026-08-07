@@ -11,6 +11,10 @@ dist/
 *.tsbuildinfo
 coverage/
 
+# Prisma generated client — sinh lại bằng `pnpm db:generate` / postinstall
+vvmv-backend/prisma/client/
+vvmv-frontend/prisma/client/
+
 # OS / editor
 .DS_Store
 *.log

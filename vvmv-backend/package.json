@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "nest build",
+    "build": "prisma generate --schema prisma/schema.prisma && nest build",
+    "postinstall": "prisma generate --schema prisma/schema.prisma || echo 'Bỏ qua prisma generate (thường do thiếu DATABASE_URL). Chạy `pnpm db:generate` sau khi có .env.'",
     "db:generate": "prisma generate --schema prisma/schema.prisma",
     "db:migrate": "prisma migrate dev --schema prisma/schema.prisma",
     "dev": "PORT=3001 nest start --watch",
