@@ -2,11 +2,6 @@ import fs from "node:fs";
 import path from "node:path";
 import { ECUS_LEGAL_DOCUMENT_OPTIONS } from "@/app/(home)/internal/followup/_components/panels/ecus-legal-document-options";
 import type { FollowUpCdsInfoRow } from "@/app/(home)/internal/followup/types";
-// Embed snapshot/catalog JSON as code dependencies so serverless bundlers
-// (Vercel/etc.) always ship them, regardless of process.cwd() or tracing config.
-import embeddedCdsLookupSnapshot from "@/database/exports/app_cds_lookups_latest/cds_database_lookups.json";
-import embeddedBankCodesJson from "@/database/exports/cds_bank_codes.json";
-import embeddedTruckLoadingCodesJson from "@/database/exports/cds_truck_loading_codes.json";
 import { isAllowedVnaccsStandardFieldValue } from "@/lib/followup/cds-vnaccs-standard-rules";
 import type { ProcessingDepartmentLookup } from "@/lib/followup/processing-department";
 
@@ -87,6 +82,10 @@ export type CdsDatabaseLookups = {
 	electronicAttachments: DatabaseElectronicAttachmentLookup[];
 };
 
+// Generated catalogs (see scripts/import-cds-lookups.ts). The tree is not
+// committed, so every reader below treats a missing file as an empty catalog.
+// `outputFileTracingIncludes` in next.config.ts ships whatever exists at build
+// time into serverless bundles, where this same cwd-relative path resolves.
 const EXPORTS_DIR = path.join(process.cwd(), "database", "exports");
 const LOOKUP_SNAPSHOT_FILE_NAME = "cds_database_lookups.json";
 const LOOKUP_SNAPSHOT_PATH = path.join(
@@ -121,21 +120,6 @@ const TRUCK_LOADING_CODES_PATH = path.join(
 
 let cachedSnapshotPath: string | null = null;
 let cachedSnapshotLookups: CdsDatabaseLookups | null = null;
-let cachedEmbeddedSnapshot: CdsDatabaseLookups | null | undefined;
-
-function readEmbeddedLookupSnapshot(): CdsDatabaseLookups | null {
-	if (cachedEmbeddedSnapshot !== undefined) {
-		return cachedEmbeddedSnapshot;
-	}
-	try {
-		cachedEmbeddedSnapshot =
-			parseSnapshotLookups(embeddedCdsLookupSnapshot) ?? null;
-	} catch (error) {
-		console.warn("Failed to parse embedded CDS lookup snapshot:", error);
-		cachedEmbeddedSnapshot = null;
-	}
-	return cachedEmbeddedSnapshot;
-}
 
 function stripBom(value: string) {
 	return value.replace(/^\uFEFF/, "");
@@ -766,8 +750,7 @@ function readLookupSnapshot() {
 	if (!snapshotPath) {
 		cachedSnapshotPath = null;
 		cachedSnapshotLookups = null;
-		// No file on disk (typical for serverless deploys): fall back to embedded JSON.
-		return readEmbeddedLookupSnapshot();
+		return null;
 	}
 
 	if (cachedSnapshotPath === snapshotPath && cachedSnapshotLookups) {
@@ -779,7 +762,7 @@ function readLookupSnapshot() {
 		const parsed = parseSnapshotLookups(JSON.parse(content));
 
 		if (!parsed) {
-			return readEmbeddedLookupSnapshot();
+			return null;
 		}
 
 		cachedSnapshotPath = snapshotPath;
@@ -787,7 +770,7 @@ function readLookupSnapshot() {
 		return parsed;
 	} catch (error) {
 		console.warn("Failed to read CDS lookup snapshot:", error);
-		return readEmbeddedLookupSnapshot();
+		return null;
 	}
 }
 
@@ -940,7 +923,7 @@ function toPermitTypeLookups(): DatabasePermitTypeLookup[] {
 function toTruckLoadingCodeLookups(): DatabaseFieldOptionLookup[] {
 	const parsed = fs.existsSync(TRUCK_LOADING_CODES_PATH)
 		? (JSON.parse(fs.readFileSync(TRUCK_LOADING_CODES_PATH, "utf8")) as unknown)
-		: (embeddedTruckLoadingCodesJson as unknown);
+		: null;
 	const rows = Array.isArray(parsed) ? parsed.filter(isRecord) : [];
 	const options: DatabaseFieldOptionLookup[] = [];
 
@@ -993,7 +976,7 @@ function toBankCodeLookups(
 ): DatabaseFieldOptionLookup[] {
 	const parsed = fs.existsSync(BANK_CODES_PATH)
 		? (JSON.parse(fs.readFileSync(BANK_CODES_PATH, "utf8")) as unknown)
-		: (embeddedBankCodesJson as unknown);
+		: null;
 	const rows = Array.isArray(parsed) ? parsed.filter(isRecord) : [];
 	const options: DatabaseFieldOptionLookup[] = [];
 

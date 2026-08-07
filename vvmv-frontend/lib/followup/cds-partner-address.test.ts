@@ -26,8 +26,9 @@ describe("CDS partner address helpers", () => {
 
 		expect(lines).toEqual([
 			"Số 11, đường 8,",
-			"Khu công nghiệp đô thị và dịch vụ VSIP Bắc Ninh,",
-			"Phường Từ Sơn, tỉnh Bắc Ninh, Việt Nam",
+			"Khu công nghiệp đô thị và dịch vụ",
+			"VSIP Bắc Ninh, Phường Từ Sơn,",
+			"tỉnh Bắc Ninh, Việt Nam",
 		]);
 		expectAddressLinesWithinLimit(lines);
 	});
@@ -38,7 +39,8 @@ describe("CDS partner address helpers", () => {
 		);
 
 		expect(lines.length).toBeGreaterThan(1);
-		expect(lines[0]).toBe("Factory Building A Very Long Industrial Technology");
+		expect(lines[0]).toBe("Factory Building A Very Long");
+		expect(lines[1]).toBe("Industrial Technology Manufacturing");
 		expectAddressLinesWithinLimit(lines);
 	});
 
@@ -79,10 +81,13 @@ describe("CDS partner address helpers", () => {
 		);
 
 		expect(patch.partnerAddress1).toBeUndefined();
+		// The 50-digit run has no word boundary, so it fills the active box to the
+		// limit and spills the remainder onto the next box before the trailing words.
 		expect(patch.partnerAddress2).toHaveLength(
 			CDS_PARTNER_ADDRESS_LINE_MAX_LENGTH,
 		);
-		expect(patch.partnerAddress3).toBe("Extra address details");
+		expect(patch.partnerAddress3).toBe("678901234567890");
+		expect(patch.partnerAddress4).toBe("Extra address details");
 		expectAddressLinesWithinLimit([
 			patch.partnerAddress2,
 			patch.partnerAddress3,

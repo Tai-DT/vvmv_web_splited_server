@@ -217,11 +217,15 @@ describe("StatsCards", () => {
 			expect(activeCard).toHaveClass("ring-amber-500/20");
 		});
 
-		it("should apply scale transformation to active card", () => {
+		it("should elevate the active card and drop its hover affordance", () => {
 			render(<StatsCards {...defaultProps} currentFilter="done" />);
 
+			// The active card is highlighted with a ring plus elevation; the hover
+			// scale-up stays on the inactive cards as their click affordance.
 			const doneCard = getCard("Done");
-			expect(doneCard).toHaveClass("scale-[1.02]");
+			expect(doneCard).toHaveClass("shadow-md");
+			expect(doneCard).not.toHaveClass("hover:scale-[1.01]");
+			expect(getCard("Active")).toHaveClass("hover:scale-[1.01]");
 		});
 
 		it("should have cursor-pointer class on all cards", () => {

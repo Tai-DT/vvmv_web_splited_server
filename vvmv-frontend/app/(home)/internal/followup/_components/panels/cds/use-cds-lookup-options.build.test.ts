@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { getCdsDatabaseLookups } from "@/lib/followup/cds-database-lookups";
+import { hasCdsExportFile } from "@/test/cds-exports-dataset";
 import type { CdsDatabaseFieldOption } from "./cds-lookup-types";
 import { formatLookupOptionLabel } from "./cds-lookup-utils";
 import {
@@ -21,21 +22,24 @@ function toSelectOptions(rows: CdsDatabaseFieldOption[] | undefined) {
 }
 
 describe("use-cds-lookup-options.build", () => {
-	it("builds non-empty guarantee bank options from merged CDS database lookups", () => {
-		const lookups = getCdsDatabaseLookups();
-		const getDynamicOptions = (fieldKey: CdsFieldKey) => {
-			if (fieldKey === "guaranteeBankCode") {
-				return toSelectOptions(lookups.fieldOptions.guaranteeBankCode);
-			}
-			if (fieldKey === "taxSubstituteBankCode") {
-				return toSelectOptions(lookups.fieldOptions.taxSubstituteBankCode);
-			}
-			return [];
-		};
+	it.skipIf(!hasCdsExportFile("cds_bank_codes.json"))(
+		"builds non-empty guarantee bank options from merged CDS database lookups",
+		() => {
+			const lookups = getCdsDatabaseLookups();
+			const getDynamicOptions = (fieldKey: CdsFieldKey) => {
+				if (fieldKey === "guaranteeBankCode") {
+					return toSelectOptions(lookups.fieldOptions.guaranteeBankCode);
+				}
+				if (fieldKey === "taxSubstituteBankCode") {
+					return toSelectOptions(lookups.fieldOptions.taxSubstituteBankCode);
+				}
+				return [];
+			};
 
-		const options = buildGuaranteeBankLookupOptions(getDynamicOptions);
-		expect(options.length).toBeGreaterThan(0);
-	});
+			const options = buildGuaranteeBankLookupOptions(getDynamicOptions);
+			expect(options.length).toBeGreaterThan(0);
+		},
+	);
 
 	it("includes an operation code present only in the dynamic payload list", () => {
 		const merged = mergeOperationCodeSelectOptions(
