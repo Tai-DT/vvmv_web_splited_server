@@ -1,7 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-// Embed package-unit catalog so serverless deploys don't need fs to find this file.
-import embeddedPackageUnitJson from "@/database/exports/BAN_DON_VI_KIEN_HANG.json";
 
 export type CdsPackageUnitCode = {
 	code: string;
@@ -76,6 +74,8 @@ function parsePackageUnitCodeRow(
 	};
 }
 
+// `database/exports` is generated (see scripts/import-cds-lookups.ts) and not
+// committed, so an absent catalog is expected — degrade to an empty list.
 function readPackageUnitRows(filePath: string): PackageUnitJsonRow[] {
 	if (fs.existsSync(filePath)) {
 		const parsed = JSON.parse(fs.readFileSync(filePath, "utf8")) as unknown;
@@ -84,9 +84,7 @@ function readPackageUnitRows(filePath: string): PackageUnitJsonRow[] {
 		}
 	}
 
-	return Array.isArray(embeddedPackageUnitJson)
-		? (embeddedPackageUnitJson as PackageUnitJsonRow[])
-		: [];
+	return [];
 }
 
 export function getCdsPackageUnitCodes(): CdsPackageUnitCode[] {

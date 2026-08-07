@@ -135,6 +135,8 @@ describe("HAN declaration DDS writer", () => {
 				transportMethodCode: "1",
 				taxDestinationLocation: "01DDEC1",
 				billOfLading: "BL-001",
+				// Goods identity is only transmitted when supervision is enabled.
+				seaportSupervisionEnabled: true,
 			},
 			operationType: "NHAP",
 			declarationNumber: null,

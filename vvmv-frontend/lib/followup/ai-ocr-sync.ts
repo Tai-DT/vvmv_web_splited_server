@@ -211,9 +211,13 @@ function normalizeTransportVehicleValue(value: unknown) {
 	return stripCdsLookupDisplayLabel(normalized);
 }
 
-function isSeaTransportVehicleCode(value: unknown) {
+/**
+ * MA_PTVT nhận mã một từ (số hiệu chuyến bay "VN123", mã tàu 4 số "1234"…).
+ * Chuỗi còn khoảng trắng là tên phương tiện, không phải mã.
+ */
+function isTransportVehicleCode(value: unknown) {
 	const text = normalizeString(value);
-	return Boolean(text && /^\d{4}$/.test(text));
+	return Boolean(text && /^[A-Za-z0-9][A-Za-z0-9./-]*$/.test(text));
 }
 
 function postProcessSanitizedCdsInfoPayload(output: SanitizedCdsInfoPayload) {
@@ -237,7 +241,7 @@ function postProcessSanitizedCdsInfoPayload(output: SanitizedCdsInfoPayload) {
 		output.transportVehicleCode,
 	);
 	if (transportVehicleCode) {
-		if (isSeaTransportVehicleCode(transportVehicleCode)) {
+		if (isTransportVehicleCode(transportVehicleCode)) {
 			output.transportVehicleCode = transportVehicleCode;
 		} else {
 			if (!normalizeString(output.transportVehicleName)) {

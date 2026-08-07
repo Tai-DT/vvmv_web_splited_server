@@ -1,7 +1,5 @@
 import fs from "node:fs";
 import path from "node:path";
-// Embed cargo-unit catalog so serverless deploys don't need fs to find this file.
-import embeddedCargoUnitJson from "@/database/exports/cds_cargo_unit_codes.json";
 
 export type CdsCargoUnitCode = {
 	stt: number;
@@ -62,9 +60,11 @@ export function getCdsCargoUnitCodes(): CdsCargoUnitCode[] {
 		return cachedCargoUnitCodes;
 	}
 
+	// `database/exports` is generated (see scripts/import-cds-lookups.ts) and not
+	// committed, so an absent catalog is expected — degrade to an empty list.
 	const rows = fs.existsSync(CARGO_UNIT_CODES_PATH)
 		? (JSON.parse(fs.readFileSync(CARGO_UNIT_CODES_PATH, "utf8")) as unknown)
-		: (embeddedCargoUnitJson as unknown);
+		: null;
 	const sourceUnits = Array.isArray(rows)
 		? rows
 				.map((row) => {

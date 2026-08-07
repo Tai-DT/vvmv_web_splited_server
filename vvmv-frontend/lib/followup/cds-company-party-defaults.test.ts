@@ -14,7 +14,7 @@ describe("cds company party defaults", () => {
 		importerPhone: "02223765438",
 	};
 
-	it("overrides local party fields before registering to HAN", () => {
+	it("fills blank party fields before registering to HAN but keeps filled ones", () => {
 		expect(
 			applyCdsCompanyPartyDefaults(
 				{
@@ -26,7 +26,22 @@ describe("cds company party defaults", () => {
 				},
 				defaults,
 			),
-		).toMatchObject(defaults);
+		).toEqual({
+			// Values already on the form win — mismatches surface as warnings
+			// instead (see buildCdsCompanyPartyDefaultWarnings).
+			importerCode: "999",
+			importExportUnitName: "Wrong Co",
+			importerPostalCode: "700000",
+			importExportBusinessAddress: "Old address",
+			importerPhone: "123",
+		});
+	});
+
+	it("replaces the placeholder postal code with the standard default", () => {
+		expect(
+			applyCdsCompanyPartyDefaults({ importerPostalCode: "x" }, defaults)
+				.importerPostalCode,
+		).toBe("700000");
 	});
 
 	it("emits warnings instead of blocking errors for mismatched party fields", () => {

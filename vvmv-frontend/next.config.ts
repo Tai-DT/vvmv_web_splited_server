@@ -37,6 +37,16 @@ function backendBase(): string | null {
 }
 
 const nextConfig: NextConfig = {
+	/**
+	 * `lib/followup/*` reads the generated CDS catalogs from
+	 * `database/exports` at `process.cwd()`. That tree is build output, not
+	 * source, so it cannot be imported as a module dependency — trace it in
+	 * explicitly so serverless bundles ship whatever exists at build time.
+	 * Readers degrade to empty catalogs when a file is absent.
+	 */
+	outputFileTracingIncludes: {
+		"/api/followup/**": ["./database/exports/**/*.{json,csv}"],
+	},
 	images: {
 		remotePatterns: [
 			{

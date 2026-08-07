@@ -1196,12 +1196,13 @@ export function buildDdsContTkRecord(args: {
 		new Date();
 	const declarationDate =
 		args.operationType === "XUAT" ? technicalDeclarationDate : null;
+	// Import DDS leaves the arrival date empty unless CDS states it explicitly —
+	// only export falls back to the departure/arrival date.
 	const estimatedArrivalDate =
 		args.operationType === "XUAT"
 			? (toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate) ??
 				toSqlDate(args.cdsInfo.departureArrivalDate))
-			: (toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate) ??
-				toSqlDate(args.cdsInfo.departureArrivalDate));
+			: toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate);
 	const billItems = normalizeBillItems(args.cdsInfo);
 	const goodsIdentity = firstNonEmpty(
 		args.cdsInfo.billOfLading,
