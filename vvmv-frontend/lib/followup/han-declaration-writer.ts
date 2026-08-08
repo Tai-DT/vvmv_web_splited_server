@@ -1196,12 +1196,13 @@ export function buildDdsContTkRecord(args: {
 		new Date();
 	const declarationDate =
 		args.operationType === "XUAT" ? technicalDeclarationDate : null;
+	// Tờ khai nhập chỉ ghi ngày đến DDS khi CDS khai rõ, không suy ra từ
+	// departureArrivalDate — cùng nguyên tắc với MA_DIA_DIEM ở dưới.
 	const estimatedArrivalDate =
 		args.operationType === "XUAT"
 			? (toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate) ??
 				toSqlDate(args.cdsInfo.departureArrivalDate))
-			: (toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate) ??
-				toSqlDate(args.cdsInfo.departureArrivalDate));
+			: toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate);
 	const billItems = normalizeBillItems(args.cdsInfo);
 	const goodsIdentity = firstNonEmpty(
 		args.cdsInfo.billOfLading,

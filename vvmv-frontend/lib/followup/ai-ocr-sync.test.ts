@@ -30,7 +30,11 @@ describe("sanitizeFollowUpCdsInfoPayload", () => {
 		);
 
 		expect(payload.transportDepartureDate).toBeUndefined();
-		expect(payload.transportVehicleCode).toBe("VN123");
+		// Phần nhiễu ETA/POD bị cắt, còn lại "VN123". Mã phương tiện chỉ giữ ở
+		// transportVehicleCode khi là mã tàu biển 4 chữ số (phương thức 2/3);
+		// số hiệu chuyến bay như VN123 thuộc về transportVehicleName.
+		expect(payload.transportVehicleCode).toBeUndefined();
+		expect(payload.transportVehicleName).toBe("VN123");
 	});
 
 	it("keeps method-only transport text as vehicle name, not vehicle code", () => {

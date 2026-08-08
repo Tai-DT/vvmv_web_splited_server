@@ -192,16 +192,14 @@ export function applyCdsCompanyPartyDefaults(
 		return next;
 	}
 
+	// Khác với mergeCdsCompanyPartyDefaults (chỉ bù ô trống khi gộp hai nguồn
+	// default), hàm này ghi đè dữ liệu người dùng nhập bằng thông tin doanh
+	// nghiệp chuẩn ngay trước khi đăng ký sang HAN. Chênh lệch đã được
+	// buildCdsCompanyPartyDefaultWarnings báo cho người dùng trước đó.
 	for (const config of COMPANY_PARTY_FIELDS) {
-		const fallbackValue = cleanText(defaults[config.field]);
-		if (
-			shouldUseFallbackCompanyPartyDefault(
-				config.field,
-				next[config.field],
-				fallbackValue,
-			)
-		) {
-			next[config.field] = fallbackValue;
+		const defaultValue = cleanText(defaults[config.field]);
+		if (defaultValue) {
+			next[config.field] = defaultValue;
 		}
 	}
 
