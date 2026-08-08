@@ -1,7 +1,15 @@
 import type { FollowUpCdsInfoRow } from "@/app/(home)/internal/followup/types";
 
-/** Giới hạn ký tự mỗi ô địa chỉ đối tác trên web — khớp ECUS/VNACCS (thường 35 ký tự/ô). */
-export const CDS_PARTNER_ADDRESS_LINE_MAX_LENGTH = 35;
+/**
+ * Giới hạn ký tự mỗi ô địa chỉ đối tác trên web — khớp bề rộng cột HAN
+ * VNACCS2.DIA_CHI_DT1..DT4 là NVARCHAR(50) (xem han-declaration-loader.ts).
+ *
+ * ĐỪNG hạ xuống nhỏ hơn 50: normalizeCdsPartnerAddressFields gộp cả bốn dòng
+ * rồi chia lại, và phần vượt quá 4 ô bị vứt lặng lẽ. Nếu giới hạn web hẹp hơn
+ * cột HAN thì chỉ cần mở một tờ khai có địa chỉ dài rồi lưu lại là mất dữ liệu
+ * (tỉnh, quốc gia, điện thoại, mã bưu chính...).
+ */
+export const CDS_PARTNER_ADDRESS_LINE_MAX_LENGTH = 50;
 export const CDS_PARTNER_ADDRESS_LINE_COUNT = 4;
 
 export const CDS_PARTNER_ADDRESS_FIELD_KEYS = [
