@@ -3,8 +3,11 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
+		"predev": "node scripts/ensure-database-exports.mjs",
 		"dev": "next dev -p 3000",
+		"prebuild": "node scripts/ensure-database-exports.mjs",
 		"build": "next build",
+		"typecheck": "node scripts/ensure-database-exports.mjs && tsc --noEmit",
 		"start": "next start",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",

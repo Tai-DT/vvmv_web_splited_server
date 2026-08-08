@@ -10,6 +10,7 @@ export default defineConfig({
 	test: {
 		environment: "happy-dom",
 		exclude: ["node_modules", ".next", "dist"],
+		globalSetup: ["./vitest.global-setup.ts"],
 		setupFiles: ["./vitest.setup.ts"],
 	},
 });

@@ -184,10 +184,12 @@ function areComboboxCellPropsEqual(
 
 	const depKey = prevProps.useDependency;
 	if (depKey) {
-		const d1 = (prevProps.table.options.meta as { dependencies?: Record<string, unknown> })
-			?.dependencies?.[depKey];
-		const d2 = (nextProps.table.options.meta as { dependencies?: Record<string, unknown> })
-			?.dependencies?.[depKey];
+		const d1 = (
+			prevProps.table.options.meta as { dependencies?: Record<string, unknown> }
+		)?.dependencies?.[depKey];
+		const d2 = (
+			nextProps.table.options.meta as { dependencies?: Record<string, unknown> }
+		)?.dependencies?.[depKey];
 		if (d1 !== d2) return false;
 	}
 	return true;

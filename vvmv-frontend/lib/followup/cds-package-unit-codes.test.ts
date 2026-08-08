@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { getCdsPackageUnitCodes } from "@/lib/followup/cds-package-unit-codes";
+import { hasPackageUnitExport } from "@/test/database-exports";
 
-describe("getCdsPackageUnitCodes", () => {
+describe.skipIf(!hasPackageUnitExport)("getCdsPackageUnitCodes", () => {
 	it("loads package units from the app BAN_DON_VI_KIEN_HANG catalog", () => {
 		const units = getCdsPackageUnitCodes();
 

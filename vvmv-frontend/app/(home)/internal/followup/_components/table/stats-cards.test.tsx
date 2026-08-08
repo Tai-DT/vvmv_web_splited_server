@@ -217,11 +217,17 @@ describe("StatsCards", () => {
 			expect(activeCard).toHaveClass("ring-amber-500/20");
 		});
 
-		it("should apply scale transformation to active card", () => {
+		it("should emphasize the active card and keep hover scale off it", () => {
 			render(<StatsCards {...defaultProps} currentFilter="done" />);
 
+			// Thẻ đang chọn được làm nổi bằng ring + shadow, không dùng scale;
+			// hiệu ứng hover:scale chỉ áp cho các thẻ chưa chọn.
 			const doneCard = getCard("Done");
-			expect(doneCard).toHaveClass("scale-[1.02]");
+			expect(doneCard).toHaveClass("shadow-md");
+			expect(doneCard).toHaveClass("ring-2");
+			expect(doneCard).not.toHaveClass("hover:scale-[1.01]");
+
+			expect(getCard("Total")).toHaveClass("hover:scale-[1.01]");
 		});
 
 		it("should have cursor-pointer class on all cards", () => {

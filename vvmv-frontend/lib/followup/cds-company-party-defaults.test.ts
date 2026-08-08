@@ -14,7 +14,9 @@ describe("cds company party defaults", () => {
 		importerPhone: "02223765438",
 	};
 
-	it("overrides local party fields before registering to HAN", () => {
+	it("keeps user-entered party fields and only fills the blank ones", () => {
+		// Khớp cam kết trong buildCdsCompanyPartyDefaultWarnings: giá trị trên form
+		// khác dữ liệu chuẩn thì vẫn được giữ, chỉ cảnh báo.
 		expect(
 			applyCdsCompanyPartyDefaults(
 				{
@@ -26,7 +28,31 @@ describe("cds company party defaults", () => {
 				},
 				defaults,
 			),
-		).toMatchObject(defaults);
+		).toMatchObject({
+			importerCode: "999",
+			importExportUnitName: "Wrong Co",
+			importExportBusinessAddress: "Old address",
+			importerPhone: "123",
+			// Chỉ ô đang trống mới được bù từ dữ liệu chuẩn.
+			importerPostalCode: "700000",
+		});
+	});
+
+	it("never lets the placeholder postal code overwrite a real one", () => {
+		// buildPartnerMasterCdsDefaults sinh `postalCode ?? "x"`, nên default rất
+		// hay mang giá trị giữ chỗ "x" khi đối tác chưa có mã bưu chính.
+		expect(
+			applyCdsCompanyPartyDefaults(
+				{ importerPostalCode: "100000" },
+				{ ...defaults, importerPostalCode: "x" },
+			).importerPostalCode,
+		).toBe("100000");
+
+		// Chiều ngược lại vẫn phải nâng cấp được: "x" trên form nhường mã thật.
+		expect(
+			applyCdsCompanyPartyDefaults({ importerPostalCode: "x" }, defaults)
+				.importerPostalCode,
+		).toBe("700000");
 	});
 
 	it("emits warnings instead of blocking errors for mismatched party fields", () => {

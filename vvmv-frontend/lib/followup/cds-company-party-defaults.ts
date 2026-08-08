@@ -192,6 +192,18 @@ export function applyCdsCompanyPartyDefaults(
 		return next;
 	}
 
+	// CHỈ bù ô trống, KHÔNG ghi đè giá trị người dùng đã nhập.
+	//
+	// Đây là hợp đồng đã cam kết với người dùng: khi giá trị trên form khác dữ
+	// liệu chuẩn theo MST, buildCdsCompanyPartyDefaultWarnings ở trên báo
+	// "sẽ ưu tiên giữ giá trị trên form hiện tại". Ghi đè ở đây sẽ biến cảnh
+	// báo đó thành lời hứa sai.
+	//
+	// Ngoại lệ duy nhất nằm trong shouldUseFallbackCompanyPartyDefault: mã bưu
+	// chính "x" là giá trị giữ chỗ, được phép thay bằng mã thật. Chiều ngược lại
+	// bị chặn — buildPartnerMasterCdsDefaults sinh ra `postalCode ?? "x"`, nên
+	// nếu ghi đè vô điều kiện thì "x" sẽ xoá mất mã bưu chính thật của người
+	// dùng và giá trị hỏng đó còn được ghi ngược vào DB qua MA_BC_DV.
 	for (const config of COMPANY_PARTY_FIELDS) {
 		const fallbackValue = cleanText(defaults[config.field]);
 		if (

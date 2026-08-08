@@ -135,6 +135,8 @@ describe("HAN declaration DDS writer", () => {
 				transportMethodCode: "1",
 				taxDestinationLocation: "01DDEC1",
 				billOfLading: "BL-001",
+				// Định danh hàng hóa chỉ ghi khi bật giám sát cảng biển/sân bay.
+				seaportSupervisionEnabled: true,
 			},
 			operationType: "NHAP",
 			declarationNumber: null,

@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { getCdsCargoUnitCodes } from "@/lib/followup/cds-cargo-unit-codes";
+import { hasCargoUnitExport } from "@/test/database-exports";
 
-describe("getCdsCargoUnitCodes", () => {
+describe.skipIf(!hasCargoUnitExport)("getCdsCargoUnitCodes", () => {
 	it("loads the HAN_2024 SDVT cargo unit lookup sorted by real usage", () => {
 		const units = getCdsCargoUnitCodes();
 
