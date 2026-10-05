@@ -72,6 +72,37 @@ describe("CDS partner address helpers", () => {
 		]);
 	});
 
+	it("keeps every character when reflowing four full-width lines loaded from HAN", () => {
+		// Cột HAN VNACCS2.DIA_CHI_DT1..DT4 là NVARCHAR(50). Mở tờ khai có đủ bốn
+		// dòng sát bề rộng cột rồi lưu lại không được làm rơi ký tự nào — trước đây
+		// giới hạn web hẹp hơn cột nên tỉnh, quốc gia, điện thoại, fax và mã bưu
+		// chính bị cắt mất trong lúc gộp-chia lại.
+		const fromHan = {
+			partnerAddress1: "SAMSUNG ELECTRONICS VIETNAM CO LTD, YEN PHONG",
+			partnerAddress2: "INDUSTRIAL PARK, YEN TRUNG COMMUNE, YEN PHONG",
+			partnerAddress3: "DISTRICT, BAC NINH PROVINCE, VIETNAM, TEL 0241",
+			partnerAddress4: "3939000, FAX 02413939001, POSTCODE 790000",
+		};
+
+		const fields = normalizeCdsPartnerAddressFields(fromHan);
+		const lines = [
+			fields.partnerAddress1,
+			fields.partnerAddress2,
+			fields.partnerAddress3,
+			fields.partnerAddress4,
+		];
+
+		expectAddressLinesWithinLimit(lines);
+
+		const wordsBefore = Object.values(fromHan)
+			.join(" ")
+			.split(/[\s,]+/);
+		const textAfter = lines.filter(Boolean).join(" ");
+		for (const word of wordsBefore) {
+			expect(textAfter).toContain(word);
+		}
+	});
+
 	it("splits a pasted long value from the active address field onward", () => {
 		const patch = buildCdsPartnerAddressFieldChangePatch(
 			"partnerAddress2",

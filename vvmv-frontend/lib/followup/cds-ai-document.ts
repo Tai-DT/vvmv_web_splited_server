@@ -50,6 +50,18 @@ export type CdsAiDocumentChecklistItem = {
 	reason: string | null;
 };
 
+export function hasUsableCdsAiDocumentSource(args: {
+	fileAttachmentCount: number;
+	isDraftRevision: boolean;
+	hasPromptDrivenSnapshot: boolean;
+}): boolean {
+	return (
+		args.fileAttachmentCount > 0 ||
+		args.isDraftRevision ||
+		args.hasPromptDrivenSnapshot
+	);
+}
+
 export const CDS_AI_DOCUMENT_KNOWN_ROOT_KEYS = new Set([
 	"cdsInfo",
 	"cargoList",
@@ -723,9 +735,16 @@ export function sanitizeCdsAiDocumentResult(
 	}
 
 	const cdsInfoSanitized = sanitizeCdsInfoPayloadDetailed(cdsSource);
+	// Reflowed address lines: keep nulls only for keys the model actually sent,
+	// so absent lines never clear values the user already has on the form.
+	const normalizedPartnerAddressFields = Object.fromEntries(
+		Object.entries(normalizeCdsPartnerAddressFields(cdsSource)).filter(
+			([key, value]) => value !== null || key in cdsSource,
+		),
+	);
 	const cdsInfo = {
 		...(cdsInfoSanitized.sanitized as Partial<FollowUpCdsInfoRow>),
-		...normalizeCdsPartnerAddressFields(cdsSource),
+		...normalizedPartnerAddressFields,
 	} as Partial<FollowUpCdsInfoRow>;
 
 	const rejectedTopLevelKeys = Object.keys(source).filter(

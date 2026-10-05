@@ -138,23 +138,37 @@ export function useCdsContainers({
 				);
 
 				let created = 0;
+				let failed = 0;
 				for (const containerNo of values) {
-					if (existingNos.has(containerNo.toUpperCase())) continue;
+					const normalizedNo = containerNo.toUpperCase();
+					if (existingNos.has(normalizedNo)) continue;
 					try {
-						await fetch("/api/followup/create-container", {
+						const res = await fetch("/api/followup/create-container", {
 							method: "POST",
 							headers: { "Content-Type": "application/json" },
 							body: JSON.stringify({ followUpId, containerNo }),
 						});
-						created++;
+						if (res.ok) {
+							created++;
+							// Also dedupe repeats of the same number inside the sheet.
+							existingNos.add(normalizedNo);
+						} else {
+							failed++;
+						}
 					} catch {
-						// skip duplicates
+						failed++;
 					}
 				}
 
 				if (created > 0) {
-					toast.success(`Đã nhập ${created} container từ Excel.`);
+					toast.success(
+						failed > 0
+							? `Đã nhập ${created} container từ Excel, ${failed} dòng lỗi.`
+							: `Đã nhập ${created} container từ Excel.`,
+					);
 					onRefresh?.();
+				} else if (failed > 0) {
+					toast.error(`Không nhập được container nào (${failed} dòng lỗi).`);
 				} else {
 					toast.info("Tất cả container đã tồn tại.");
 				}

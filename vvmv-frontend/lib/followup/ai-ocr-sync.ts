@@ -213,7 +213,9 @@ function normalizeTransportVehicleValue(value: unknown) {
 
 function isSeaTransportVehicleCode(value: unknown) {
 	const text = normalizeString(value);
-	return Boolean(text && /^\d{4}$/.test(text));
+	// A vehicle code is a single compact token containing at least one digit
+	// (e.g. "VN123", "9601"); multi-word values are vessel names instead.
+	return Boolean(text && /\d/.test(text) && /^[A-Z0-9-]{3,12}$/i.test(text));
 }
 
 function postProcessSanitizedCdsInfoPayload(output: SanitizedCdsInfoPayload) {

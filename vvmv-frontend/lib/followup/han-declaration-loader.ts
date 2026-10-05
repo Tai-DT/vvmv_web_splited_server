@@ -868,8 +868,8 @@ export function buildHanDeclarationPrefill(row: SqlRow) {
 		guaranteeDocumentNumber:
 			clean(row.creditLimitDocumentNumber) ??
 			clean(row.creditLimitDocumentNumberHeader),
-		creditLimitIssueYear:
-			clean(row.creditLimitIssueYear) ?? clean(row.creditLimitIssueYearHeader),
+		creditLimitIssueYear: clean(row.creditLimitIssueYear),
+		guaranteeIssueYear: clean(row.guaranteeIssueYearHeader),
 		otherLegalDocumentCodes: otherLegalDocumentCodes.some(
 			(item) => item !== null,
 		)
@@ -1333,7 +1333,7 @@ async function loadHanDeclarationPrefillInternal(args: {
         CAST(v2.BL_THUE_SO_CT AS NVARCHAR(64)) AS creditLimitDocumentNumber,
         CAST(h.DAM_BAO_SO_CT AS NVARCHAR(64)) AS creditLimitDocumentNumberHeader,
         CAST(v2.BL_THUE_NAM_CT AS NVARCHAR(10)) AS creditLimitIssueYear,
-        CAST(h.DAM_BAO_NAM_PHAT_HANH AS NVARCHAR(10)) AS creditLimitIssueYearHeader,
+        CAST(h.DAM_BAO_NAM_PHAT_HANH AS NVARCHAR(10)) AS guaranteeIssueYearHeader,
         CAST(v2.MA_GP2 AS NVARCHAR(32)) AS licenseCode2,
         CAST(v2.SO_GP2 AS NVARCHAR(128)) AS licenseNumber2,
         CAST(v2.MA_GP3 AS NVARCHAR(32)) AS licenseCode3,

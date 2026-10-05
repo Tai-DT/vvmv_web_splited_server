@@ -953,7 +953,9 @@ export function buildHeaderRecord(args: {
 			operationType === "XUAT" ? cleanCode(cdsInfo.exportCountryCode) : null,
 		KDT_LASTINFO: null,
 		DAM_BAO_MA_NG_HANG: cleanCode(cdsInfo.guaranteeBankCode),
-		DAM_BAO_NAM_PHAT_HANH: toNumber(cdsInfo.creditLimitIssueYear),
+		DAM_BAO_NAM_PHAT_HANH: toNumber(
+			firstNonEmpty(cdsInfo.guaranteeIssueYear, cdsInfo.creditLimitIssueYear),
+		),
 		DAM_BAO_KY_HIEU_CT: firstNonEmpty(
 			cdsInfo.guaranteeDocumentSymbol,
 			cdsInfo.creditLimitDocumentSymbol,
@@ -1085,7 +1087,9 @@ export function buildVnaccs2Record(cdsInfo: Partial<FollowUpCdsInfoRow>) {
 			cdsInfo.guaranteeDocumentNumber,
 			cdsInfo.creditLimitDocumentNumber,
 		),
-		BL_THUE_NAM_CT: toNumber(cdsInfo.creditLimitIssueYear),
+		BL_THUE_NAM_CT: toNumber(
+			firstNonEmpty(cdsInfo.guaranteeIssueYear, cdsInfo.creditLimitIssueYear),
+		),
 		MA_DD_LUU_KHO: cleanCode(cdsInfo.warehouseLocationCode),
 		MA_GP2: importLicenses[1]?.code ?? null,
 		SO_GP2: importLicenses[1]?.number ?? null,
@@ -1196,20 +1200,18 @@ export function buildDdsContTkRecord(args: {
 		new Date();
 	const declarationDate =
 		args.operationType === "XUAT" ? technicalDeclarationDate : null;
+	// Import drafts only take the explicit DDS arrival date; the general
+	// departure/arrival date must not leak into NGAY_TAU_DEN for NHAP.
 	const estimatedArrivalDate =
 		args.operationType === "XUAT"
 			? (toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate) ??
 				toSqlDate(args.cdsInfo.departureArrivalDate))
-			: (toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate) ??
-				toSqlDate(args.cdsInfo.departureArrivalDate));
+			: toSqlDate(args.cdsInfo.estimatedArrivalAtDestinationDate);
 	const billItems = normalizeBillItems(args.cdsInfo);
 	const goodsIdentity = firstNonEmpty(
 		args.cdsInfo.billOfLading,
 		billItems[0]?.billNumber,
 	);
-	const shouldWriteGoodsIdentity =
-		args.cdsInfo.seaportSupervisionEnabled === true ||
-		args.cdsInfo.airportSupervisionEnabled === true;
 
 	return {
 		_DTOKHAIMDID: args.declarationId,
@@ -1231,9 +1233,7 @@ export function buildDdsContTkRecord(args: {
 		MA_DIA_DIEM: normalizeDdsTaxDestinationCode(
 			args.cdsInfo.taxDestinationLocation,
 		),
-		DINH_DANH_HANG_HOA: shouldWriteGoodsIdentity
-			? cleanWithinMax(goodsIdentity, 255)
-			: null,
+		DINH_DANH_HANG_HOA: cleanWithinMax(goodsIdentity, 255),
 	} satisfies SqlRecord;
 }
 

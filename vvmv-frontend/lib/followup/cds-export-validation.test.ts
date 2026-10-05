@@ -118,8 +118,8 @@ describe("validateCdsForEcusExport", () => {
 		);
 	});
 
-	it("does not validate person organization classification for export operation codes", () => {
-		for (const operationCode of ["B11", "E42", "E54"]) {
+	it("does not validate person organization classification for non-required export operation codes", () => {
+		for (const operationCode of ["B11", "E54"]) {
 			const result = validateCdsForEcusExport({
 				...buildValidExportInput(),
 				cdsInfo: {
@@ -132,6 +132,26 @@ describe("validateCdsForEcusExport", () => {
 			expect(result.issues).not.toContainEqual(
 				expect.objectContaining({
 					path: "cdsInfo.personOrganizationClassification",
+				}),
+			);
+		}
+	});
+
+	it("requires person organization classification for selected export E operation codes", () => {
+		for (const operationCode of ["E42", "E52", "E62", "E82"]) {
+			const result = validateCdsForEcusExport({
+				...buildValidExportInput(),
+				cdsInfo: {
+					...buildValidExportInput().cdsInfo,
+					operationCode,
+					personOrganizationClassification: null,
+				},
+			});
+
+			expect(getBlockingCdsExportIssues(result.issues)).toContainEqual(
+				expect.objectContaining({
+					path: "cdsInfo.personOrganizationClassification",
+					severity: "error",
 				}),
 			);
 		}

@@ -327,8 +327,10 @@ export function hydrateCdsInfoUiFields(
 
 	return {
 		...source,
-		declarationNumber: null,
-		firstDeclarationNumber: null,
+		// App-issued numbers must survive hydration: field locks and the
+		// read-only banner rely on them (they are never editable on the web).
+		declarationNumber: source.declarationNumber ?? null,
+		firstDeclarationNumber: source.firstDeclarationNumber ?? null,
 		warehouseLocationCode:
 			source.warehouseLocationCode ?? customsWarehouseCode ?? null,
 		warehouseLocationName:
@@ -351,8 +353,9 @@ export function hydrateCdsInfoUiFields(
 		seaportSupervisionEnabled,
 		airportSupervisionEnabled,
 		transportVehicleCode,
-		// Keep this field empty by default until business rules are finalized.
-		internalBusinessManagementNumber: null,
+		// Empty by default, but never wipe a value the user already saved.
+		internalBusinessManagementNumber:
+			source.internalBusinessManagementNumber ?? null,
 		weightUnit: normalizeCdsWeightUnit(source.weightUnit),
 	} satisfies Partial<FollowUpCdsInfoRow>;
 }

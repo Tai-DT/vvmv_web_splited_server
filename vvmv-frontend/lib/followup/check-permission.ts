@@ -51,8 +51,18 @@ export async function checkFollowUpPermission(
 					team: {
 						include: {
 							department: { select: { name: true, site: true } },
-							members: { select: { userId: true } },
-							leaders: { select: { userId: true } },
+							members: {
+								select: {
+									userId: true,
+									user: { select: { email: true, username: true, name: true } },
+								},
+							},
+							leaders: {
+								select: {
+									userId: true,
+									user: { select: { email: true, username: true, name: true } },
+								},
+							},
 						},
 					},
 				},
@@ -62,7 +72,12 @@ export async function checkFollowUpPermission(
 					team: {
 						include: {
 							department: { select: { name: true, site: true } },
-							members: { select: { userId: true } },
+							members: {
+								select: {
+									userId: true,
+									user: { select: { email: true, username: true, name: true } },
+								},
+							},
 						},
 					},
 				},
@@ -95,6 +110,24 @@ export async function checkFollowUpPermission(
 	const userDeptNames = new Set<string>();
 	const userSites = new Set<string>();
 	const teammateIds = new Set<string>([userId]);
+	const teammateIdentities = new Set<string>();
+	const addTeammate = (member: {
+		userId: string;
+		user?: {
+			email?: string | null;
+			username?: string | null;
+			name?: string | null;
+		} | null;
+	}) => {
+		teammateIds.add(member.userId);
+		[member.user?.email, member.user?.username, member.user?.name]
+			.map(normalizeIdentity)
+			.forEach((identity) => {
+				if (identity) {
+					teammateIdentities.add(identity);
+				}
+			});
+	};
 
 	if (currentUser.site) {
 		userSites.add(currentUser.site);
@@ -115,12 +148,8 @@ export async function checkFollowUpPermission(
 		if (leadership.team?.department?.site) {
 			userSites.add(leadership.team.department.site);
 		}
-		leadership.team.members.forEach((member) => {
-			teammateIds.add(member.userId);
-		});
-		leadership.team.leaders.forEach((leader) => {
-			teammateIds.add(leader.userId);
-		});
+		leadership.team.members.forEach(addTeammate);
+		leadership.team.leaders.forEach(addTeammate);
 	});
 	currentUser.teamMemberships.forEach((membership) => {
 		if (membership.team?.department?.name) {
@@ -129,9 +158,7 @@ export async function checkFollowUpPermission(
 		if (membership.team?.department?.site) {
 			userSites.add(membership.team.department.site);
 		}
-		membership.team.members.forEach((member) => {
-			teammateIds.add(member.userId);
-		});
+		membership.team.members.forEach(addTeammate);
 	});
 
 	const isAuthorizedManager =
@@ -180,7 +207,10 @@ export async function checkFollowUpPermission(
 		const canReadAsTeamLeader =
 			currentUser.teamLeaderships.length > 0 &&
 			(teammateIds.has(followUp.createdBy) ||
-				(followUp.handler ? teammateIds.has(followUp.handler) : false));
+				// handler stores a name/email, not a user id — match identities
+				(normalizedHandler
+					? teammateIdentities.has(normalizedHandler)
+					: false));
 		const canReadUnassignedTeamJob =
 			teammateIds.has(followUp.createdBy) &&
 			(!followUp.handler || followUp.handler.trim() === "");

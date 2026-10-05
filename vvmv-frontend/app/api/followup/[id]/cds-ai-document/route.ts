@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prismaRPA } from "@/lib/db";
 import {
 	buildCdsAiDocumentChecklist,
+	hasUsableCdsAiDocumentSource,
 	parseGeminiCdsAiDocumentJson,
 	sanitizeCdsAiDocumentResult,
 } from "@/lib/followup/cds-ai-document";
@@ -36,6 +37,9 @@ const MAX_TEXT_PART_CHARS = 120_000;
 function normalizeRequestedGeminiModel(requested: string | null): string {
 	const fallback = DEFAULT_MODEL;
 	if (!requested?.trim()) return fallback;
+	// The model id is interpolated into the Gemini URL: restrict it to a safe
+	// token so a crafted value cannot rewrite the request path or query.
+	if (!/^[a-zA-Z0-9._-]+$/.test(requested.trim())) return fallback;
 	const allowRaw = process.env.GEMINI_CDS_DOCUMENT_MODEL_ALLOWLIST?.trim();
 	if (!allowRaw) return requested.trim();
 	const allowed = new Set(
@@ -557,11 +561,13 @@ export async function POST(
 
 		const { id } = await params;
 		followUpId = id;
+		// Write mode: this POST spends Gemini quota and records GeminiHistory,
+		// so view-only roles must not be able to trigger it.
 		const permission = await checkFollowUpPermission(
 			id,
 			session.user.id,
 			session.user.role ?? "",
-			{ mode: "read" },
+			{ mode: "write" },
 		);
 
 		if (!permission.ok) {
@@ -585,7 +591,7 @@ export async function POST(
 			chatTranscriptForApi &&
 			chatTranscriptForApi.length > MAX_CHAT_TRANSCRIPT_CHARS
 		) {
-			chatTranscriptForApi = `${chatTranscriptForApi.slice(0, MAX_CHAT_TRANSCRIPT_CHARS)}\n[Đã cắt bớt lịch sử hội thoại do quá dài.]`;
+			chatTranscriptForApi = `[Đã cắt bớt phần đầu lịch sử hội thoại do quá dài.]\n${chatTranscriptForApi.slice(-MAX_CHAT_TRANSCRIPT_CHARS)}`;
 		}
 		driveFileIds = normalizeStringList(formData.getAll("driveFileIds"));
 		driveFileNames = normalizeStringList(formData.getAll("driveFileNames"));
@@ -739,7 +745,16 @@ export async function POST(
 			}
 		}
 
-		if (parts.length === 1) {
+		// Context parts (transcript/draft/snapshot) don't count as sources: block
+		// the paid Gemini call when no usable document part was produced.
+		const fileAttachmentCount = driveBuilt.length + uploadBuilt.length;
+		if (
+			!hasUsableCdsAiDocumentSource({
+				fileAttachmentCount,
+				isDraftRevision,
+				hasPromptDrivenSnapshot,
+			})
+		) {
 			return NextResponse.json(
 				{
 					error:

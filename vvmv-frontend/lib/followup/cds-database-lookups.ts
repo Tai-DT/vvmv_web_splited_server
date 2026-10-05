@@ -65,7 +65,7 @@ export type DatabaseFieldOptionLookup = {
 	address?: string | null;
 	count: number;
 	direction: DeclarationDirection;
-	source: "header" | "vnaccs" | "app" | "app_saved";
+	source: "header" | "vnaccs" | "app" | "app_saved" | "snapshot";
 };
 
 export type DatabaseElectronicAttachmentLookup = {
@@ -271,13 +271,15 @@ function toFieldOptionLookupList(
 			return null;
 		}
 
+		// Unlabelled rows keep the low-priority "snapshot" source so they never
+		// outrank curated header/vnaccs/app options during merges.
 		const source =
 			item.source === "header" ||
 			item.source === "vnaccs" ||
 			item.source === "app" ||
 			item.source === "app_saved"
 				? item.source
-				: "header";
+				: "snapshot";
 
 		return {
 			field: fieldKey,

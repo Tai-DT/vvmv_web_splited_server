@@ -25,6 +25,7 @@ export const CDS_FIELD_LABELS = new Map<string, string>([
 	["taxSubstituteBankCode", "Mã ngân hàng trả thuế thay"],
 	["guaranteeBankCode", "Mã ngân hàng bảo lãnh"],
 	["creditLimitIssueYear", "Năm phát hành hạn mức"],
+	["guaranteeIssueYear", "Năm phát hành bảo lãnh"],
 	["creditLimitDocumentSymbol", "Ký hiệu chứng từ hạn mức"],
 	["creditLimitDocumentNumber", "Số chứng từ hạn mức"],
 	["guaranteeDocumentSymbol", "Ký hiệu chứng từ bảo lãnh"],
