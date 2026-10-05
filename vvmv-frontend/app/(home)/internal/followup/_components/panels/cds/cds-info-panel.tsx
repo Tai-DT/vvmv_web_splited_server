@@ -120,6 +120,7 @@ import {
 	buildHanCandidateComparisonSummary,
 	hydrateCdsInfoUiFields,
 } from "./cds-prefill";
+import { buildCargoIdentificationPrintHtml } from "./cds-print";
 import { REQUIRED_CDS_FIELDS } from "./cds-required-fields";
 import {
 	ATTACHMENT_SECTION_TITLES,
@@ -603,6 +604,12 @@ export function CdsInfoPanel({
 	);
 
 	useEffect(() => {
+		// Never self-heal a locked declaration: the app's stored value must be
+		// displayed as-is even when it is missing from the current option list.
+		if (isAppIssuedDeclaration) {
+			return;
+		}
+
 		const currentPackageType = String(data.packageType ?? "").trim();
 		if (!currentPackageType) {
 			return;
@@ -631,6 +638,7 @@ export function CdsInfoPanel({
 	}, [
 		data.packageType,
 		getLookupOptionsForField,
+		isAppIssuedDeclaration,
 		preserveActiveTabScroll,
 		setData,
 	]);
@@ -1801,6 +1809,58 @@ export function CdsInfoPanel({
 		return total > 0 ? String(total) : "";
 	}, [data.valuationAdjustments]);
 
+	const printCargoIdentification = () => {
+		const cargoIdentificationNumber =
+			String(data.billOfLading ?? "").trim() ||
+			String(data.declarationNumber ?? "").trim();
+		if (!cargoIdentificationNumber) {
+			toast.error(
+				"Chưa có số vận đơn / số định danh hàng hóa để in. Điền Vận đơn trước.",
+			);
+			return;
+		}
+
+		const html = buildCargoIdentificationPrintHtml({
+			cargoIdentificationNumber,
+			declarationNumber: String(data.declarationNumber ?? "").trim() || null,
+			declarationDate: data.expectedDeclarationDate ?? null,
+			taxCode: followUpSummary?.taxCode ?? taxCode ?? data.importerCode ?? null,
+			companyName:
+				followUpSummary?.companyName ??
+				companyName ??
+				data.importExportUnitName ??
+				null,
+			jobNumber: followUpSummary?.jobNumber ?? null,
+			sourceLabel: "CDS Info",
+			printedAt: new Date().toLocaleString("vi-VN"),
+		});
+		const printWindow = window.open("", "_blank", "width=900,height=700");
+		if (!printWindow) {
+			toast.error("Trình duyệt đang chặn cửa sổ in. Hãy cho phép popup.");
+			return;
+		}
+		printWindow.document.write(html);
+		printWindow.document.close();
+		printWindow.focus();
+		printWindow.print();
+	};
+
+	const renderPrintCargoIdentificationButton = (options?: {
+		className?: string;
+		icon?: ReactNode;
+		ariaLabel?: string;
+	}) => (
+		<button
+			type="button"
+			aria-label={options?.ariaLabel ?? "In số định danh hàng hóa"}
+			title="In số định danh hàng hóa"
+			onClick={printCargoIdentification}
+			className={cn(ecusClassicButtonCls, options?.className)}
+		>
+			{options?.icon ?? "In"}
+		</button>
+	);
+
 	const renderInfoButton = (
 		message: string,
 		options?: {
@@ -1857,6 +1917,7 @@ export function CdsInfoPanel({
 		renderLookupCodeAndName,
 		renderLookupPickerButton,
 		renderInfoButton,
+		renderPrintCargoIdentificationButton,
 		renderExportSectionHeader,
 		getImportImage1FieldLockOptions,
 		getExportFieldLockOptions,

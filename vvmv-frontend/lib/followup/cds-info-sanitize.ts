@@ -253,6 +253,13 @@ export function sanitizeCdsInfoPayloadDetailed(payload: CdsPayload): {
 	Object.entries(payload).forEach(([key, rawValue]) => {
 		const targetKey = LEGACY_CDS_INFO_FIELD_ALIASES[key] ?? key;
 
+		// When a payload carries both the canonical field and one of its legacy
+		// aliases (UI mirrors), the canonical value must win regardless of key
+		// order — stale mirrors must never overwrite a user's edit.
+		if (targetKey !== key && Object.hasOwn(payload, targetKey)) {
+			return;
+		}
+
 		if (
 			targetKey === "id" ||
 			targetKey === "followUpId" ||
@@ -267,11 +274,13 @@ export function sanitizeCdsInfoPayloadDetailed(payload: CdsPayload): {
 			return;
 		}
 
+		// Declaration numbers are app-issued: web payloads must never set or
+		// clear them. Skip the keys so updates leave the columns untouched;
+		// sync flows persist them explicitly from app/HAN data.
 		if (
 			targetKey === "declarationNumber" ||
 			targetKey === "firstDeclarationNumber"
 		) {
-			output[targetKey] = null;
 			return;
 		}
 

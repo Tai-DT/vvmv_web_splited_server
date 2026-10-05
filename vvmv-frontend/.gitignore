@@ -21,7 +21,16 @@ next-env.d.ts
 
 # generated/ephemeral data
 outputs/
-database/
+database/**
+# Keep minimal committed snapshots so builds/typecheck work on fresh clones;
+# local re-exports (pnpm cds:import-lookups) overwrite them at runtime via fs.
+!database/exports/
+!database/exports/app_cds_lookups_latest/
+!database/exports/app_cds_lookups_latest/cds_database_lookups.json
+!database/exports/cds_bank_codes.json
+!database/exports/cds_cargo_unit_codes.json
+!database/exports/cds_truck_loading_codes.json
+!database/exports/BAN_DON_VI_KIEN_HANG.json
 test-db.js
 
 # coverage

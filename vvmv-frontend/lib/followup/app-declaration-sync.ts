@@ -9,6 +9,7 @@ import {
 import {
 	buildCdsCollectionWrites,
 	CDS_INFO_COLLECTION_INCLUDE,
+	hydrateCdsCollections,
 	toPrismaCdsScalarPayload,
 } from "@/lib/followup/cds-normalized-collections";
 import type { Prisma } from "@/prisma/client";
@@ -98,11 +99,22 @@ export async function syncFollowUpDeclarationFromApp(followUpId: string) {
 		declaration.prefill as CdsPayload,
 	);
 	const cargoList = sanitizeCargoListPayload(declaration.cargoList);
+	const prefillRecord = declaration.prefill as CdsPayload;
+	const syncedDeclarationNumber =
+		clean(prefillRecord.declarationNumber) ??
+		clean(declaration.declarationNumber) ??
+		declarationNumber;
+	const syncedFirstDeclarationNumber =
+		clean(prefillRecord.firstDeclarationNumber) ?? syncedDeclarationNumber;
 	const cdsUpdateData = {
 		...(toPrismaCdsScalarPayload(
 			sanitizedCdsInfo,
 		) as Prisma.FollowUpCdsInfoUpdateInput),
 		...buildCdsCollectionWrites(sanitizedCdsInfo),
+		// Sanitize drops app-issued declaration numbers; persist them explicitly
+		// here since this flow is the authoritative sync from the app.
+		declarationNumber: syncedDeclarationNumber,
+		firstDeclarationNumber: syncedFirstDeclarationNumber,
 		cdsStatus: "REGISTERED",
 		ecusDeclarationId: declaration.declarationId,
 	} as Prisma.FollowUpCdsInfoUpdateInput;
@@ -138,10 +150,13 @@ export async function syncFollowUpDeclarationFromApp(followUpId: string) {
 		term: clean(item.term),
 	}));
 
-	const saved = await prismaRPA.followUpCdsInfo.update({
-		where: { followUpId },
-		data: cdsUpdateData,
-	});
+	const saved = hydrateCdsCollections(
+		await prismaRPA.followUpCdsInfo.update({
+			where: { followUpId },
+			data: cdsUpdateData,
+			include: CDS_INFO_COLLECTION_INCLUDE,
+		}),
+	);
 
 	await prismaRPA.cargoList.deleteMany({ where: { followUpId } });
 	if (cargoCreateRows.length > 0) {

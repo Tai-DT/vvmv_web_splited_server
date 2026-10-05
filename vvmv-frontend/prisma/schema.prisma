@@ -297,6 +297,7 @@ model FollowUpCdsInfo {
   releaseBeforePermitCode           String?  @map("release_before_permit_code")
   taxPaymentDeadlineCode            String?  @map("tax_payment_deadline_code")
   taxDestinationLocation            String?  @map("tax_destination_location")
+  finalDestinationName              String?  @map("final_destination_name")
   estimatedArrivalAtDestinationDate String?  @map("estimated_arrival_at_destination_date")
   transportDepartureDate            String?  @map("transport_departure_date")
   note                              String?
@@ -346,6 +347,7 @@ model FollowUpCdsInfo {
   valuationSummaryReceiptNumber     String?  @map("valuation_summary_receipt_number")
   taxSubstituteBankCode             String?  @map("tax_substitute_bank_code")
   creditLimitIssueYear              String?  @map("credit_limit_issue_year")
+  guaranteeIssueYear                String?  @map("guarantee_issue_year")
   guaranteeBankCode                 String?  @map("guarantee_bank_code")
   creditLimitDocumentSymbol         String?  @map("credit_limit_document_symbol")
   creditLimitDocumentNumber         String?  @map("credit_limit_document_number")

@@ -66,6 +66,11 @@ export interface CdsTabRenderProps {
 			ariaLabel?: string;
 		},
 	) => ReactNode;
+	renderPrintCargoIdentificationButton: (options?: {
+		className?: string;
+		icon?: ReactNode;
+		ariaLabel?: string;
+	}) => ReactNode;
 	renderExportSectionHeader: (title: string) => ReactNode;
 	getImportImage1FieldLockOptions: (
 		fieldKey: keyof FollowUpCdsInfoRow,

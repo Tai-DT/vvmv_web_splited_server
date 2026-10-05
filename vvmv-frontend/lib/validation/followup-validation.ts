@@ -163,16 +163,16 @@ export function validateForFastInput(row: FollowUpRow): ValidationError[] {
 			});
 		} else {
 			// Validate container data completeness
-			const _invalidContainers = row.containers.some(
+			const invalidContainers = row.containers.some(
 				(container) => !container.containerNo || !container.sealNo,
 			);
 
-			// if (invalidContainers) {
-			//   errors.push({
-			//     field: "containers",
-			//     message: "All containers must have Container No. and Seal No.",
-			//   });
-			// }
+			if (invalidContainers) {
+				errors.push({
+					field: "containers",
+					message: "All containers must have Container No. and Seal No.",
+				});
+			}
 		}
 	}
 
@@ -331,16 +331,16 @@ export function validateForTruckingRequest(
 			});
 		} else {
 			// Validate container data completeness
-			const _invalidContainers = row.containers.some(
+			const invalidContainers = row.containers.some(
 				(container) => !container.containerNo || !container.sealNo,
 			);
 
-			// if (invalidContainers) {
-			//   errors.push({
-			//     field: "containers",
-			//     message: "All containers must have Container No. and Seal No.",
-			//   });
-			// }
+			if (invalidContainers) {
+				errors.push({
+					field: "containers",
+					message: "All containers must have Container No. and Seal No.",
+				});
+			}
 		}
 	}
 
@@ -396,13 +396,19 @@ export function validateFollowUpForBotAction(
 		case BOT_ACTIONS.TRUCKING_REQUEST:
 			return validateForTruckingRequest(row);
 
-		// Other actions: no validation for now
+		// Document-driven actions: the bots read files from Drive, so the URL
+		// must exist before dispatch (same prerequisite as FAST CDS).
 		case BOT_ACTIONS.DRAFT_CDS:
 		case BOT_ACTIONS.FAST_CO:
+			return validateForFastCDS(row);
+
+		// These operate on already-registered ERP jobs/declarations; the bot
+		// performs its own server-side checks, so no client fields are required.
 		case BOT_ACTIONS.FAST_FINISH:
 		case BOT_ACTIONS.FAST_UNFINISH:
 		case BOT_ACTIONS.CHECK_QUA_KVGS:
-			return []; // No validation for now
+		case BOT_ACTIONS.CHECK_CDS_ATTACHMENT:
+			return [];
 
 		default:
 			return [];

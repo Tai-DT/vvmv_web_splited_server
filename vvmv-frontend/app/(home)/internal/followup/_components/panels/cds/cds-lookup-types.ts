@@ -68,7 +68,7 @@ export type CdsDatabaseFieldOption = {
 	address?: string | null;
 	count: number;
 	direction: DeclarationDirection;
-	source: "header" | "vnaccs" | "app" | "app_saved";
+	source: "header" | "vnaccs" | "app" | "app_saved" | "snapshot";
 };
 
 export type CdsProcessingDepartmentLookup = ProcessingDepartmentLookup;

@@ -27,6 +27,7 @@ import {
 import {
 	buildCdsCollectionWrites,
 	CDS_INFO_COLLECTION_INCLUDE,
+	hydrateCdsCollections,
 	toPrismaCdsScalarPayload,
 } from "@/lib/followup/cds-normalized-collections";
 import { checkFollowUpPermission } from "@/lib/followup/check-permission";
@@ -184,7 +185,9 @@ export async function POST(
 			);
 		}
 
-		const cdsInfo = followUp.cdsInfo as unknown as Partial<FollowUpCdsInfoRow>;
+		const cdsInfo = hydrateCdsCollections(
+			followUp.cdsInfo,
+		) as Partial<FollowUpCdsInfoRow>;
 		const cargoList = followUp.cargoLists as unknown as Array<
 			Partial<CargoListRow>
 		>;
@@ -338,10 +341,19 @@ export async function POST(
 		});
 
 		const registeredAt = new Date();
-		const roundTripPersistedData = registerResult.roundTripDeclaration?.prefill
-			? (sanitizeCdsInfoPayload(
+		const roundTripSanitized = registerResult.roundTripDeclaration?.prefill
+			? sanitizeCdsInfoPayload(
 					registerResult.roundTripDeclaration.prefill as CdsPayload,
-				) as Prisma.FollowUpCdsInfoUncheckedUpdateInput)
+				)
+			: null;
+		const roundTripPersistedData = roundTripSanitized
+			? ({
+					...toPrismaCdsScalarPayload(roundTripSanitized),
+					...buildCdsCollectionWrites(roundTripSanitized),
+					...(registerResult.declarationNumber
+						? { declarationNumber: registerResult.declarationNumber }
+						: {}),
+				} as Prisma.FollowUpCdsInfoUpdateInput)
 			: {};
 
 		await prismaRPA.followUpCdsInfo.update({
