@@ -50,6 +50,18 @@ export type CdsAiDocumentChecklistItem = {
 	reason: string | null;
 };
 
+export function hasUsableCdsAiDocumentSource(args: {
+	fileAttachmentCount: number;
+	isDraftRevision: boolean;
+	hasPromptDrivenSnapshot: boolean;
+}): boolean {
+	return (
+		args.fileAttachmentCount > 0 ||
+		args.isDraftRevision ||
+		args.hasPromptDrivenSnapshot
+	);
+}
+
 export const CDS_AI_DOCUMENT_KNOWN_ROOT_KEYS = new Set([
 	"cdsInfo",
 	"cargoList",

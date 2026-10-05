@@ -1,7 +1,52 @@
 import { describe, expect, it } from "vitest";
-import { sanitizeCdsAiDocumentResult } from "./cds-ai-document";
+import {
+	hasUsableCdsAiDocumentSource,
+	sanitizeCdsAiDocumentResult,
+} from "./cds-ai-document";
 import { CDS_PARTNER_ADDRESS_LINE_MAX_LENGTH } from "./cds-partner-address";
 import { getCdsVnaccsFieldLabel } from "./cds-vnaccs-field-labels";
+
+describe("hasUsableCdsAiDocumentSource", () => {
+	it("rejects requests with no source", () => {
+		expect(
+			hasUsableCdsAiDocumentSource({
+				fileAttachmentCount: 0,
+				isDraftRevision: false,
+				hasPromptDrivenSnapshot: false,
+			}),
+		).toBe(false);
+	});
+
+	it("allows requests with file attachments", () => {
+		expect(
+			hasUsableCdsAiDocumentSource({
+				fileAttachmentCount: 1,
+				isDraftRevision: false,
+				hasPromptDrivenSnapshot: false,
+			}),
+		).toBe(true);
+	});
+
+	it("allows draft revisions without file attachments", () => {
+		expect(
+			hasUsableCdsAiDocumentSource({
+				fileAttachmentCount: 0,
+				isDraftRevision: true,
+				hasPromptDrivenSnapshot: false,
+			}),
+		).toBe(true);
+	});
+
+	it("allows prompt-driven snapshots", () => {
+		expect(
+			hasUsableCdsAiDocumentSource({
+				fileAttachmentCount: 0,
+				isDraftRevision: false,
+				hasPromptDrivenSnapshot: true,
+			}),
+		).toBe(true);
+	});
+});
 
 describe("sanitizeCdsAiDocumentResult", () => {
 	it("labels exporterCode by VNACCS role for export declarations", () => {

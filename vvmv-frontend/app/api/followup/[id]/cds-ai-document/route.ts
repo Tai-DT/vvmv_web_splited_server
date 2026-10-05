@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { prismaRPA } from "@/lib/db";
 import {
 	buildCdsAiDocumentChecklist,
+	hasUsableCdsAiDocumentSource,
 	parseGeminiCdsAiDocumentJson,
 	sanitizeCdsAiDocumentResult,
 } from "@/lib/followup/cds-ai-document";
@@ -747,7 +748,13 @@ export async function POST(
 		// Context parts (transcript/draft/snapshot) don't count as sources: block
 		// the paid Gemini call when no usable document part was produced.
 		const fileAttachmentCount = driveBuilt.length + uploadBuilt.length;
-		if (fileAttachmentCount === 0 && !hasPromptDrivenSnapshot) {
+		if (
+			!hasUsableCdsAiDocumentSource({
+				fileAttachmentCount,
+				isDraftRevision,
+				hasPromptDrivenSnapshot,
+			})
+		) {
 			return NextResponse.json(
 				{
 					error:
